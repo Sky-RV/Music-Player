@@ -4,13 +4,11 @@ A new Flutter project.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+This application can play musics from internal/external storage and online musics.
+At the first step you should create an account in Sign Up Page.
+In the Home Page, you can see online musics which filtered by newest and recommended musics.
+In the Search Page, you can see your offline musics, and you can search them.
+In the Playlist Page, each list categorized by the artist's albums.
+For any of the online music you can download them and see them in the Download Page.
+Each of downloaded music is saved into internal storage.
+In the Setting Page you can edit your information and log out.
