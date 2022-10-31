@@ -1,23 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:m_player/Tools/Utils.dart';
+import 'package:m_player/UI/Downloads_Page.dart';
+import 'package:m_player/UI/Home_Page.dart';
+import 'package:m_player/UI/Playlist_Page.dart';
+import 'package:m_player/UI/Search_Page.dart';
 
-class Home_Page extends StatefulWidget {
-  const Home_Page({Key? key}) : super(key: key);
+class Main_Page extends StatefulWidget {
+  const Main_Page({Key? key}) : super(key: key);
 
   @override
-  State<Home_Page> createState() => _Home_PageState();
+  State<Main_Page> createState() => _Main_PageState();
 }
 
-class _Home_PageState extends State<Home_Page> {
+class _Main_PageState extends State<Main_Page> {
 
   int _currentIndex = 0;
 
   final Pages = [
-    const myHome(),
-    const mySearch(),
-    const myPlaylist(),
-    const myDownloads(),
-    const mySettings()
+    const Home_Page(),
+    const Search_Page(),
+    const Playlist_Page(),
+    const Downloads_Page(),
+    const Search_Page()
   ];
 
   void _updateIndex(int value){
