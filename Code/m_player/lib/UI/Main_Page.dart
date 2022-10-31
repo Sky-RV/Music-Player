@@ -64,7 +64,7 @@ class _Main_PageState extends State<Main_Page> {
         onTap: _updateIndex,
         selectedItemColor: myColors.green,
         unselectedItemColor: Colors.black38,
-        selectedFontSize: 18,
+        selectedFontSize: 16,
         unselectedFontSize: 14,
         showSelectedLabels: false,
         showUnselectedLabels: false,
