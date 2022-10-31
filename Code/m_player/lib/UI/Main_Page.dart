@@ -38,6 +38,7 @@ class _Main_PageState extends State<Main_Page> {
 
       appBar: AppBar(
         backgroundColor: myColors.white,
+        centerTitle: true,
         title: Text(
           "M Player",
           style: TextStyle(
@@ -62,9 +63,11 @@ class _Main_PageState extends State<Main_Page> {
         currentIndex: _currentIndex,
         onTap: _updateIndex,
         selectedItemColor: myColors.green,
-        unselectedItemColor: Colors.black26,
-        selectedFontSize: 16,
+        unselectedItemColor: Colors.black38,
+        selectedFontSize: 18,
         unselectedFontSize: 14,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
         items: [
           BottomNavigationBarItem(
             label: "Home",
