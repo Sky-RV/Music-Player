@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:m_player/Tools/Utils.dart';
-import 'package:m_player/UI/Bottom Navigation/Downloads_Page.dart';
-import 'package:m_player/UI/Bottom%20Navigation/Home_Page.dart';
-import 'package:m_player/UI/Bottom Navigation/Playlist_Page.dart';
-import 'package:m_player/UI/Bottom Navigation/Search_Page.dart';
+import 'package:m_player/UI/Bottom_Navigation/Downloads_Page.dart';
+import 'package:m_player/UI/Bottom_Navigation/Home_Page.dart';
+import 'package:m_player/UI/Bottom_Navigation/Playlist_Page.dart';
+import 'package:m_player/UI/Bottom_Navigation/Search_Page.dart';
+import 'package:m_player/UI/Bottom_Navigation/Settings_Page.dart';
 
 class Main_Page extends StatefulWidget {
   const Main_Page({Key? key}) : super(key: key);
@@ -21,7 +22,7 @@ class _Main_PageState extends State<Main_Page> {
     const Search_Page(),
     const Playlist_Page(),
     const Downloads_Page(),
-    const Search_Page()
+    const Settings_Page()
   ];
 
   void _updateIndex(int value){
