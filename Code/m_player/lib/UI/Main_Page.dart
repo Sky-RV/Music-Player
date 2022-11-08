@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:m_player/Tools/Utils.dart';
-import 'package:m_player/UI/Downloads_Page.dart';
-import 'package:m_player/UI/Home_Page.dart';
-import 'package:m_player/UI/Playlist_Page.dart';
-import 'package:m_player/UI/Search_Page.dart';
+import 'package:m_player/UI/Bottom Navigation/Downloads_Page.dart';
+import 'package:m_player/UI/Bottom%20Navigation/Home_Page.dart';
+import 'package:m_player/UI/Bottom Navigation/Playlist_Page.dart';
+import 'package:m_player/UI/Bottom Navigation/Search_Page.dart';
 
 class Main_Page extends StatefulWidget {
   const Main_Page({Key? key}) : super(key: key);
