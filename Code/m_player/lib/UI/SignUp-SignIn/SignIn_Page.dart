@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:m_player/Tools/Utils.dart';
+import 'package:m_player/UI/SignUp-SignIn/SignUp_Page.dart';
 
 class LogIn extends StatefulWidget {
   @override
@@ -119,9 +120,10 @@ class _LogInState extends State<LogIn>
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
                                   HapticFeedback.lightImpact();
-                                  Fluttertoast.showToast(
-                                    msg: 'Create a new Account button pressed',
-                                  );
+                                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => SignUp()));
+                                  // Fluttertoast.showToast(
+                                  //   msg: 'Create a new Account button pressed',
+                                  // );
                                 },
                             ),
                           ),
