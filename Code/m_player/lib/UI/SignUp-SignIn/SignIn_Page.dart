@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:m_player/Tools/Utils.dart';
+import 'package:m_player/UI/Main_Page.dart';
 import 'package:m_player/UI/SignUp-SignIn/SignUp_Page.dart';
 
 class LogIn extends StatefulWidget {
@@ -164,9 +165,10 @@ class _LogInState extends State<LogIn>
                             highlightColor: Colors.transparent,
                             onTap: () {
                               HapticFeedback.lightImpact();
-                              Fluttertoast.showToast(
-                                msg: 'SIGN-IN button pressed',
-                              );
+                              Navigator.of(context).push(MaterialPageRoute(builder: (context) => Main_Page()));
+                              // Fluttertoast.showToast(
+                              //   msg: 'SIGN-IN button pressed',
+                              // );
                             },
                             child: Container(
                               height: _width * .2,
