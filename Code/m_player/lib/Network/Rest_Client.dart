@@ -1,0 +1,14 @@
+import 'package:dio/dio.dart';
+import 'package:m_player/Models/Music_Model.dart';
+import 'package:retrofit/http.dart';
+
+part 'Rest_Client.g.dart';
+
+@RestApi(baseUrl: 'http://mobilemasters.ir/apps/radiojavan/')
+abstract class Rest_Client{
+
+  factory Rest_Client(Dio dio, {String baseUrl}) = _RestClient;
+
+  Future<List<Music_Model>> getLatestMusics();
+
+}
