@@ -32,4 +32,10 @@ class _Rest_Client implements Rest_Client {
     }
     return requestOptions;
   }
+
+  @override
+  Future<List<Music_Model>> getLatestMusics() {
+    // TODO: implement getLatestMusics
+    throw UnimplementedError();
+  }
 }
