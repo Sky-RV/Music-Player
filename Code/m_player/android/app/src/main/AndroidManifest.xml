@@ -2,7 +2,7 @@
     package="com.example.m_player">
     <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:usesClearTextTraffic="true"
+       android:usesCleartextTraffic="true"
         android:label="m_player"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
