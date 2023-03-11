@@ -34,7 +34,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
       backgroundColor: myColors.white,
 
-      body:   bodyScreens.elementAt(_currentIndex),
+      body: bodyScreens.elementAt(_currentIndex),
 
       bottomNavigationBar: FloatingNavbar(
         onTap: (value){

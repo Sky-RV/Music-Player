@@ -28,4 +28,7 @@ abstract class Rest_Client{
   @GET('api.php?cat_list')
   Future<Category_Base_Model> getCategories();
 
+  @GET('api.php')
+  Future<Latest_Music_Model> getMusicsByCategory(@Query("cat_id") String id);
+
 }
