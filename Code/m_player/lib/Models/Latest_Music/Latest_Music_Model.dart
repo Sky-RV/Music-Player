@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:m_player/Models/Music_Model.dart';
+import 'package:m_player/Models/Music/Music_Model.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:dio/dio.dart';
 

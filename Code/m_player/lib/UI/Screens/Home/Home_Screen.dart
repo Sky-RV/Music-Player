@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:m_player/Models/Album_Base_Model.dart';
+import 'package:m_player/Models/Album_Base/Album_Base_Model.dart';
+import 'package:m_player/Models/Latest_Music/Latest_Music_Model.dart';
 import 'package:m_player/Network/Rest_Client.dart';
-import 'package:m_player/Models/Latest_Music_Model.dart';
 import 'package:m_player/Utils/MyColors.dart';
 
 class HomeScreen extends StatefulWidget {
