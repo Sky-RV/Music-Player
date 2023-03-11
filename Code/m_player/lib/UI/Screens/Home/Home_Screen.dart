@@ -46,6 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
                    // width: MediaQuery.of(context).size.width, // New Music text would be in the center
                    // height: MediaQuery.of(context).size.height,
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
                           margin: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
@@ -196,6 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   return Container(
                     width: MediaQuery.of(context).size.width,
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
                           margin: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
