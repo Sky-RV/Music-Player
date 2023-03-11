@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:m_player/Models/Album_Base/Album_Base_Model.dart';
+import 'package:m_player/Models/Artist_Base/Artist_Base_Model.dart';
 import 'package:m_player/Models/Latest_Music/Latest_Music_Model.dart';
 import 'package:m_player/Models/Playlist_Base/Playlist_Base_Model.dart';
 import 'package:m_player/Network/Rest_Client.dart';
@@ -23,6 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late Future<Latest_Music_Model> getLatestMusics;
   late Future<Album_Base_Model> getAlbums;
   late Future<Playlist_Base_Model> getPlaylists;
+  late Future<Artist_Base_Model> getResentArtist;
 
   @override
   void initState() {
@@ -32,6 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
     getLatestMusics = rest_client.getLatestMusics();
     getAlbums = rest_client.getAlbums();
     getPlaylists = rest_client.getPlaylists();
+    getResentArtist = rest_client.getRecentArtists();
   }
 
   @override
@@ -180,49 +183,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                   placeholder: (context, url) => CircularProgressIndicator(),
                                   errorWidget: (context, url, error) => Icon(Icons.error),
                                 );
-                                // return CachedNetworkImage(
-                                //   width: 164,
-                                //   height: 164,
-                                //   imageUrl: "${snapshot.data!.musics![index].mp3_thumbnail_b}",
-                                //   imageBuilder: (context, imageProvider) => Container(
-                                //     margin: EdgeInsets.all(8),
-                                //     decoration: BoxDecoration(
-                                //       image: DecorationImage(
-                                //           image: imageProvider,
-                                //          // colorFilter:
-                                //           //ColorFilter.mode(Colors.red, BlendMode.colorBurn)),
-                                //       )
-                                //       ),
-                                //     child: Stack(
-                                //       children: [
-                                //         Positioned(
-                                //           child: Container(
-                                //             decoration: BoxDecoration(
-                                //               gradient: LinearGradient(
-                                //                  colors: [
-                                //                    Colors.amber,
-                                //                    myColors.yellow,
-                                //                    Colors.amberAccent
-                                //                  ]
-                                //               ),
-                                //             ),
-                                //             child: Center(
-                                //               child: Text(
-                                //                 '${snapshot.data!.musics![index].mp3_title}',
-                                //                 style: TextStyle(fontSize: 16),
-                                //               ),
-                                //             ),
-                                //           ),
-                                //           bottom: 5,
-                                //           right: 0,
-                                //           left: 0,
-                                //         )
-                                //       ],
-                                //     )
-                                //   ),
-                                //   placeholder: (context, url) => CircularProgressIndicator(),
-                                //   errorWidget: (context, url, error) => Icon(Icons.error),
-                                // );
                               },
                             ),
                           )
@@ -321,6 +281,82 @@ class _HomeScreenState extends State<HomeScreen> {
                           )
                         ],
                       ),
+                    );
+                  }
+                  else if (snapshot.hasError){
+                    return Center(
+                      child: Text("Error accured. Please check your connection."),
+                    );
+                  }
+                  else{
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                },
+              ),
+
+              FutureBuilder<Artist_Base_Model>(
+                future: getResentArtist,
+                builder: (context, snapshot){
+                  if (snapshot.hasData){
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                          child: Text(
+                            "Latest Artists",
+                            style: TextStyle(
+                                fontSize: 26,
+                                color: myColors.green
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 200,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: snapshot.data!.artist!.length,
+                            itemBuilder: (context, index){
+                              return Column(
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.all(8),
+                                    child: CircleAvatar(
+                                      radius: 60,
+                                      child: ClipOval(
+                                        child: CachedNetworkImage(
+                                          imageUrl: "${snapshot.data!.artist![index].artist_image}",
+                                          imageBuilder: (context, imageProvider) => Container(
+                                            margin: EdgeInsets.all(8),
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(15.0),
+                                              image: DecorationImage(
+                                                image: imageProvider,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                          ),
+                                          placeholder: (context, url) => CircularProgressIndicator(),
+                                          errorWidget: (context, url, error) => Icon(Icons.error),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Text(
+                                    "${snapshot.data!.artist![index].artist_name}",
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        color: myColors.darkGreen
+                                    ),
+                                  )
+                                ],
+                              );
+                            },
+                          ),
+                        )
+                      ],
                     );
                   }
                   else if (snapshot.hasError){
