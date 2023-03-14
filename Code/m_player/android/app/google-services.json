@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "924225677487",
+    "project_id": "music-player-sky1401",
+    "storage_bucket": "music-player-sky1401.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:924225677487:android:873f2723c24cd5ef6f4c5a",
+        "android_client_info": {
+          "package_name": "com.example.m_player"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "924225677487-as1bkpbkvmel40evn3n61kbooeu3ngnp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6k9i1OEotz0_vMbcJyzRWoO9easOyX9s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "924225677487-as1bkpbkvmel40evn3n61kbooeu3ngnp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
