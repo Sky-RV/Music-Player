@@ -45,6 +45,8 @@ dependencies:
   json_serializable: ^6.6.1
   cached_network_image: ^3.2.1
   flutter_image_slideshow: ^0.1.4
+  miniplayer: ^1.0.1
+  just_audio: ^0.9.32
 
 dev_dependencies:
   flutter_test:
