@@ -445,7 +445,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     await player.pause();
                                   }
                                 },
-                                icon: Icon(currantStatePlay == false ? Icons.pause : Icons.play_arrow, color: myColors.darkGreen,),
+                                icon: Icon(currantStatePlay == true ? Icons.pause : Icons.play_arrow, color: myColors.darkGreen,),
                               ),
                               IconButton(
                                 onPressed: (){},
@@ -579,15 +579,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   await player.pause();
                                                 }
                                               },
-                                              icon: Icon(currantStatePlay == false ? Icons.pause : Icons.play_arrow, color: myColors.darkGreen, size: 48,),
+                                              icon: Icon(currantStatePlay == true ? Icons.play_arrow : Icons.pause, color: myColors.darkGreen, size: 48,),
                                             ),
                                             SizedBox(width: 30,),
                                             IconButton(
-                                              onPressed: (){},
+                                              onPressed: () async {
+                                                await player.seekToNext();
+                                              },
                                               icon: Icon(Icons.skip_next, color: myColors.darkGreen, size: 48,),
                                             ),
                                           ],
-                                        )
+                                        ),
+                                        // SizedBox(height: 20,),
+                                        // IconButton(
+                                        //   onPressed: () async {
+                                        //     await player.shuffle();
+                                        //   },
+                                        //   icon: Icon(Icons.shuffle, color: myColors.darkGreen, size: 28,),
+                                        // ),
                                       ],
                                     ),
                                   ),
