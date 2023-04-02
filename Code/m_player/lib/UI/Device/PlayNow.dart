@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:m_player/Utils/MyColors.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
@@ -32,7 +33,14 @@ class _PlayNowState extends State<PlayNow> {
     try {
       widget.audioPlayer.setAudioSource(
           AudioSource.uri(
-              Uri.parse(widget.songModel.uri!)
+              Uri.parse(widget.songModel.uri!),
+            tag: MediaItem(
+              id: '${widget.songModel.id}',
+              album: '${widget.songModel.album}',
+              title: '${widget.songModel.displayNameWOExt}',
+              artUri: Uri.parse('https://example.com/albumart.jpg'),
+            ),
+          ),
           )
       );
       widget.audioPlayer.play();

@@ -2,10 +2,19 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:m_player/Models/Music/Music_Model.dart';
 import 'package:m_player/UI/Device/PlayNow.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:just_audio_background/just_audio_background.dart';
+
+Future<void> main() async {
+  await JustAudioBackground.init(
+    androidNotificationChannelId: 'com.ryanheise.bg_demo.channel.audio',
+    androidNotificationChannelName: 'Audio playback',
+    androidNotificationOngoing: true,
+  );
+  runApp(DeviceScreen());
+}
 
 class DeviceScreen extends StatefulWidget{
   @override
