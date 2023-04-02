@@ -18,6 +18,8 @@ class PlayNow extends StatefulWidget {
 class _PlayNowState extends State<PlayNow> {
 
   bool _isPlaying = false;
+  Duration _duration = const Duration();
+  Duration _position = const Duration();
 
   @override
   void initState() {
@@ -39,6 +41,16 @@ class _PlayNowState extends State<PlayNow> {
     on Exception{
       log("Can not parse song.");
     }
+    widget.audioPlayer.durationStream.listen((d) {
+      setState(() {
+        _duration = d!;
+      });
+    });
+    widget.audioPlayer.positionStream.listen((p) {
+      setState(() {
+        _position = p!;
+      });
+    });
   }
 
   @override
@@ -122,14 +134,21 @@ class _PlayNowState extends State<PlayNow> {
                     SizedBox(height: 30,),
                     Row(
                       children: [
-                        Text("0:0"),
+                        Text(_duration.toString().split(".")[0]),
                         Expanded(
                           child: Slider(
-                            value: 0.0,
-                            onChanged: (value){},
+                            value: _position.inSeconds.toDouble(),
+                            max: _duration.inSeconds.toDouble(),
+                            min: Duration(microseconds: 0).inSeconds.toDouble(),
+                            onChanged: (value){
+                              setState(() {
+                                changeToSeconds(value.toInt());
+                                value = value;
+                              });
+                            },
                           ),
                         ),
-                        Text("0:0"),
+                        Text(_position.toString().split(".")[0]),
                       ],
                     )
                   ],
@@ -141,4 +160,10 @@ class _PlayNowState extends State<PlayNow> {
       ),
     );
   }
+
+  void changeToSeconds(int sec){
+    Duration duration = Duration(seconds: sec);
+    widget.audioPlayer.seek(duration);
+  }
+
 }
