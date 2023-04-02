@@ -41,7 +41,6 @@ class _PlayNowState extends State<PlayNow> {
               artUri: Uri.parse('https://example.com/albumart.jpg'),
             ),
           ),
-          )
       );
       widget.audioPlayer.play();
       _isPlaying = true;

@@ -76,7 +76,11 @@ class _DeviceScreen extends State<DeviceScreen>{
           return ListView.builder(
             itemCount: items.data!.length,
             itemBuilder: (context, index) => ListTile(
-              leading: Icon(Icons.music_note),
+              leading: QueryArtworkWidget(
+                id: items.data![index].id,
+                type: ArtworkType.AUDIO,
+                nullArtworkWidget: Icon(Icons.music_note),
+              ),
               title: Text(items.data![index].title),
               subtitle: Text("${items.data![index].artist}"),
             //  trailing: Icon(Icons.more_vert),
