@@ -2,12 +2,12 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:m_player/Provider/SongModelProvider.dart';
+// import 'package:m_player/Provider/Song_Model_Provider.dart';
 import 'package:m_player/UI/Device/PlayNow.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:just_audio_background/just_audio_background.dart';
-import 'package:provider/provider.dart';
+// import 'package:provider/provider.dart';
 
 Future<void> main() async {
   await JustAudioBackground.init(
@@ -15,12 +15,13 @@ Future<void> main() async {
     androidNotificationChannelName: 'Audio playback',
     androidNotificationOngoing: true,
   );
-  runApp(
-    ChangeNotifierProvider(
-      create: (context) => SongModelProvider(),
-      child: DeviceScreen(),
-    )
-  );
+  // runApp(
+  //   ChangeNotifierProvider(
+  //     create: (context) => Song_Model_Provider(),
+  //     child: DeviceScreen(),
+  //   )
+  // );
+  runApp(DeviceScreen());
 }
 
 class DeviceScreen extends StatefulWidget{
@@ -93,7 +94,7 @@ class _DeviceScreen extends State<DeviceScreen>{
             //  trailing: Icon(Icons.more_vert),
               onTap:(){
                 //playSong(items.data![index].uri);
-                context.read<SongModelProvider>().setId(items.data![index].id);
+                //context.read<Song_Model_Provider>().setId(items.data![index].id);
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => PlayNow(songModel: items.data![index], audioPlayer: _audioPlayer,))
