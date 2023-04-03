@@ -3,8 +3,10 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
+import 'package:m_player/Provider/SongModelProvider.dart';
 import 'package:m_player/Utils/MyColors.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:provider/provider.dart';
 
 class PlayNow extends StatefulWidget {
   const PlayNow({Key? key, required this.songModel, required this.audioPlayer}) : super(key: key);
@@ -80,9 +82,12 @@ class _PlayNowState extends State<PlayNow> {
               Center(
                 child: Column(
                   children: [
-                    CircleAvatar(
-                      radius: 100,
-                      child: Icon(Icons.music_note, size: 80,),
+                    // CircleAvatar(
+                    //   radius: 100,
+                    //   child: Icon(Icons.music_note, size: 80,),
+                    // ),
+                    Center(
+                      child: const ArtWorkWidget(),
                     ),
                     SizedBox(height: 30,),
                     Text(
@@ -173,4 +178,23 @@ class _PlayNowState extends State<PlayNow> {
     widget.audioPlayer.seek(duration);
   }
 
+}
+
+class ArtWorkWidget extends StatelessWidget {
+  const ArtWorkWidget({
+    Key? key,
+  }) : super(key: key);
+
+
+  @override
+  Widget build(BuildContext context) {
+    return QueryArtworkWidget(
+      id: context.watch<SongModelProvider>().id,
+      type: ArtworkType.AUDIO,
+      artworkHeight: 200.0,
+      artworkWidth: 200.0,
+      artworkFit: BoxFit.cover,
+      nullArtworkWidget: Icon(Icons.music_note, color: myColors.darkGreen, size: 150,),
+    );
+  }
 }
