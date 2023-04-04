@@ -21,11 +21,20 @@ class _DeviceScreen extends State<DeviceScreen>{
   final OnAudioQuery _audioQuery = OnAudioQuery();
   final AudioPlayer _audioPlayer = AudioPlayer();
 
+  List<SongModel> songs = [];
+  String currentTitle = '';
+  int currentIndex = 0;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     requestPermission();
+    _audioPlayer.currentIndexStream.listen((index) {
+      if(index != null){
+        _updateCurrentPlaySongDetails(index);
+      }
+    });
   }
 
   void requestPermission(){
@@ -41,6 +50,24 @@ class _DeviceScreen extends State<DeviceScreen>{
     } on Exception {
       log("Error parsing song");
     }
+  }
+
+  // create playllist
+  ConcatenatingAudioSource createPlaylist(List<SongModel> songs){
+    List<AudioSource> sources = [];
+    for (var song in songs){
+      sources.add(AudioSource.uri(Uri.parse(song.uri!)));
+    }
+    return ConcatenatingAudioSource(children: sources);
+  }
+
+  void _updateCurrentPlaySongDetails(int index){
+    setState(() {
+      if(songs.isNotEmpty){
+        currentTitle = songs[index].title;
+        currentIndex = index;
+      }
+    });
   }
 
   @override
@@ -92,4 +119,9 @@ class _DeviceScreen extends State<DeviceScreen>{
 
     );
   }
+}
+
+class DurationState{
+  Duration position, total;
+  DurationState({this.position = Duration.zero, this.total = Duration.zero});
 }

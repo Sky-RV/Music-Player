@@ -27,7 +27,8 @@ class _PlayNowState extends State<PlayNow> {
   Duration _duration = const Duration();
   Duration _position = const Duration();
 
-  
+  bool _isShuffel = false;
+  bool _isRepeat = false;
 
   @override
   void initState() {
@@ -51,6 +52,8 @@ class _PlayNowState extends State<PlayNow> {
       );
       widget.audioPlayer.play();
       _isPlaying = true;
+      _isShuffel = false;
+      _isRepeat = false;
     }
     on Exception{
       log("Can not parse song.");
@@ -127,11 +130,48 @@ class _PlayNowState extends State<PlayNow> {
                     ),
                     SizedBox(height: 30,),
                     Row(
+                      children: [
+                        Text(_position.toString().split(".")[0]),
+                        Expanded(
+                          child: Slider(
+                            value: _position.inSeconds.toDouble(),
+                            max: _duration.inSeconds.toDouble(),
+                            min: Duration(microseconds: 0).inSeconds.toDouble(),
+                            activeColor: myColors.yellow,
+                            inactiveColor: myColors.yellow.withOpacity(0.5),
+                            onChanged: (value){
+                              setState(() {
+                                changeToSeconds(value.toInt());
+                                value = value;
+                              });
+                            },
+                          ),
+                        ),
+                        Text(_duration.toString().split(".")[0]),
+                      ],
+                    ),
+                    SizedBox(height: 30,),
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        IconButton(
-                          onPressed: (){},
-                          icon: Icon(Icons.skip_previous, color: myColors.darkGreen, size: 40,),
+                        Flexible(
+                          child: InkWell(
+                            onTap: (){
+                              if(widget.audioPlayer.hasPrevious){
+                                widget.audioPlayer.seekToPrevious();
+                                print("skip previous if condition");
+                              }
+                              print("skip previous");
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(10),
+                              child: Icon(
+                                  Icons.skip_previous,
+                                  color: myColors.darkGreen,
+                                size: 40,
+                              ),
+                            ),
+                          ),
                         ),
                         IconButton(
                           onPressed: () {
@@ -150,32 +190,90 @@ class _PlayNowState extends State<PlayNow> {
                             color: myColors.darkGreen, size: 40,
                           ),
                         ),
-                        IconButton(
-                          onPressed: (){},
-                          icon: Icon(Icons.skip_next, color: myColors.darkGreen, size: 40,),
+                        Flexible(
+                          child: InkWell(
+                            onTap: (){
+                              if(widget.audioPlayer.hasNext){
+                                  print("before seek next");
+                                  widget.audioPlayer.seekToNext();
+                                  print("skip next if condition");
+                              }
+                              print("skip next");
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(10),
+                              child: Icon(
+                                Icons.skip_next,
+                                color: myColors.darkGreen,
+                                size: 40,
+                              ),
+                            ),
+                          ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 30,),
+
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisSize: MainAxisSize.max,
                       children: [
-                        Text(_position.toString().split(".")[0]),
-                        Expanded(
-                          child: Slider(
-                            value: _position.inSeconds.toDouble(),
-                            max: _duration.inSeconds.toDouble(),
-                            min: Duration(microseconds: 0).inSeconds.toDouble(),
-                            onChanged: (value){
-                              setState(() {
-                                changeToSeconds(value.toInt());
-                                value = value;
-                              });
-                            },
+                        Flexible(
+                          child: InkWell(
+                            onTap: (){
+                              //_changePlayerViewVisibility();
+                              Navigator.pop(context);
+                              },
+                            child: Container(
+                              padding: EdgeInsets.all(10),
+                              child: Icon(Icons.list_rounded, color: myColors.darkGreen,),
+                            ),
                           ),
                         ),
-                        Text(_duration.toString().split(".")[0]),
+                        Flexible(
+                          child: InkWell(
+                            onTap: (){
+                              widget.audioPlayer.loopMode == LoopMode.one ? widget.audioPlayer.setLoopMode(LoopMode.all) : widget.audioPlayer.setLoopMode(LoopMode.one);
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(10),
+                              child: StreamBuilder<LoopMode>(
+                                stream: widget.audioPlayer.loopModeStream,
+                                builder: (context, snapchat){
+                                  final loopMode = snapchat.data;
+                                  if(LoopMode.one == loopMode){
+                                    return Icon(Icons.repeat_one, color: myColors.yellow,);
+                                  }
+                                  return Icon(Icons.repeat, color: myColors.darkGreen,);
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                        Flexible(
+                          child: InkWell(
+                            onTap: (){
+                              setState(() {
+                                if(_isShuffel){
+                                  widget.audioPlayer.setShuffleModeEnabled(true);
+                                }
+                                else{
+                                  widget.audioPlayer.setShuffleModeEnabled(false);
+                                }
+                                _isShuffel = !_isShuffel;
+                              });
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(10),
+                              child: Icon(
+                                  Icons.shuffle,
+                                  color: _isShuffel? myColors.yellow : myColors.darkGreen
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     )
+
                   ],
                 ),
               ),
