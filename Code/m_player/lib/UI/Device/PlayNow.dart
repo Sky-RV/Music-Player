@@ -3,9 +3,11 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
+import 'package:m_player/Provider/Song_Model_Provider.dart';
 // import 'package:m_player/Provider/Song_Model_Provider.dart';
 import 'package:m_player/Utils/MyColors.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:provider/provider.dart';
 // import 'package:provider/provider.dart';
 
 
@@ -24,6 +26,8 @@ class _PlayNowState extends State<PlayNow> {
   bool _isPlaying = false;
   Duration _duration = const Duration();
   Duration _position = const Duration();
+
+  
 
   @override
   void initState() {
@@ -73,12 +77,12 @@ class _PlayNowState extends State<PlayNow> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              IconButton(
-                icon: Icon(Icons.arrow_back_ios),
-                onPressed: (){
-                  Navigator.pop(context);
-                },
-              ),
+              // IconButton(
+              //   icon: Icon(Icons.arrow_back_ios),
+              //   onPressed: (){
+              //     Navigator.pop(context);
+              //   },
+              // ),
               SizedBox(height: 30,),
               Center(
                 child: Column(
@@ -88,14 +92,14 @@ class _PlayNowState extends State<PlayNow> {
                     //   child: Icon(Icons.music_note, size: 80,),
                     // ),
                     Center(
-                      //child: const ArtWorkWidget(),
+                      // child: const ArtWorkWidget(),
                       child: QueryArtworkWidget(
                           id: widget.songModel.id,
                           type: ArtworkType.AUDIO,
                           artworkHeight: 200.0,
                           artworkWidth: 200.0,
                           artworkFit: BoxFit.cover,
-                          nullArtworkWidget: Icon(Icons.music_note, color: myColors.darkGreen, size: 150,),
+                          nullArtworkWidget: Icon(Icons.music_note, color: myColors.darkGreen, size: 200,),
                         ),
                     ),
                     SizedBox(height: 30,),
@@ -155,7 +159,7 @@ class _PlayNowState extends State<PlayNow> {
                     SizedBox(height: 30,),
                     Row(
                       children: [
-                        Text(_duration.toString().split(".")[0]),
+                        Text(_position.toString().split(".")[0]),
                         Expanded(
                           child: Slider(
                             value: _position.inSeconds.toDouble(),
@@ -169,7 +173,7 @@ class _PlayNowState extends State<PlayNow> {
                             },
                           ),
                         ),
-                        Text(_position.toString().split(".")[0]),
+                        Text(_duration.toString().split(".")[0]),
                       ],
                     )
                   ],
