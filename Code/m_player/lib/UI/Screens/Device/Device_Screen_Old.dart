@@ -53,13 +53,13 @@ class _DeviceScreen extends State<DeviceScreen>{
   }
 
   // create playllist
-  ConcatenatingAudioSource createPlaylist(List<SongModel> songs){
-    List<AudioSource> sources = [];
-    for (var song in songs){
-      sources.add(AudioSource.uri(Uri.parse(song.uri!)));
-    }
-    return ConcatenatingAudioSource(children: sources);
-  }
+  // ConcatenatingAudioSource createPlaylist(List<SongModel> songs){
+  //   List<AudioSource> sources = [];
+  //   for (var song in songs){
+  //     sources.add(AudioSource.uri(Uri.parse(song.uri!)));
+  //   }
+  //   return ConcatenatingAudioSource(children: sources);
+  // }
 
   void _updateCurrentPlaySongDetails(int index){
     setState(() {

@@ -2,7 +2,8 @@ import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.da
 import 'package:flutter/material.dart';
 import 'package:m_player/UI/Device/mainDevice.dart';
 import 'package:m_player/UI/Screens/Category/Category_Screen.dart';
-import 'package:m_player/UI/Screens/Device/Device_Screen.dart';
+import 'package:m_player/UI/Screens/Device/Device_Screen_New.dart';
+import 'package:m_player/UI/Screens/Device/Device_Screen_Old.dart';
 import 'package:m_player/UI/Screens/Home/Home_Screen.dart';
 import 'package:m_player/Utils/MyColors.dart';
 
@@ -19,7 +20,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   List<Widget> bodyScreens = [
     HomeScreen(),
     CategoryScreen(),
-    MainDevice()
+    Device_Screen_New()
+    // DeviceScreen()
   ];
 
   @override

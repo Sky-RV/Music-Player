@@ -190,26 +190,83 @@ class _PlayNowState extends State<PlayNow> {
                             color: myColors.darkGreen, size: 40,
                           ),
                         ),
-                        Flexible(
-                          child: InkWell(
-                            onTap: (){
-                              if(widget.audioPlayer.hasNext){
+                        IconButton(
+                          icon: Icon(
+                            Icons.skip_next,
+                            color: myColors.darkGreen,
+                            size: 40,
+                          ),
+                          onPressed: (){
+                            setState(() {
+                              try {
+                                if (widget.audioPlayer.hasNext) {
                                   print("before seek next");
                                   widget.audioPlayer.seekToNext();
                                   print("skip next if condition");
+                                }
+                                print("skip next");
+                              } catch (e) {
+                                print("Error seeking to next song: $e");
                               }
-                              print("skip next");
-                            },
-                            child: Container(
-                              padding: EdgeInsets.all(10),
-                              child: Icon(
-                                Icons.skip_next,
-                                color: myColors.darkGreen,
-                                size: 40,
-                              ),
-                            ),
-                          ),
+                              print(widget.audioPlayer.playerState);
+                              print(widget.audioPlayer.hasNext);
+                              print(widget.audioPlayer.hasPrevious);
+                              print(widget.audioPlayer.currentIndex);
+                              print(widget.audioPlayer.audioSource.toString());
+                            });
+                          },
                         ),
+                        // Flexible(
+                        //   child: InkWell(
+                        //     onTap: (){
+                        //       try {
+                        //         if (widget.audioPlayer.hasNext) {
+                        //           print("before seek next");
+                        //           widget.audioPlayer.seekToNext();
+                        //           print("skip next if condition");
+                        //         }
+                        //         print("skip next");
+                        //       } catch (e) {
+                        //         print("Error seeking to next song: $e");
+                        //       }
+                        //       print(widget.audioPlayer.playerState);
+                        //       print(widget.audioPlayer.hasNext);
+                        //       print(widget.audioPlayer.hasPrevious);
+                        //       print(widget.audioPlayer.currentIndex);
+                        //       print(widget.audioPlayer.audioSource.toString());
+                        //
+                        //     },
+                        //     // onTap: (){
+                        //     //   if(widget.audioPlayer.hasNext){
+                        //     //     print("before seek next");
+                        //     //     widget.audioPlayer.play();  // make sure player is playing
+                        //     //     widget.audioPlayer.seekToNext();
+                        //     //     print("skip next if condition");
+                        //     //     //   print("before seek next");
+                        //     //     //   widget.audioPlayer.seekToNext();
+                        //     //     //   print("skip next if condition");
+                        //     //     //   print(widget.audioPlayer.currentIndex);
+                        //     //
+                        //     //     // try {
+                        //     //     //   widget.audioPlayer.seekToNext();
+                        //     //     //   print("skip music");
+                        //     //     // } catch (error) {
+                        //     //     //   print('Skip next Error: $error');
+                        //     //     // }
+                        //     //
+                        //     //   }
+                        //     //   print("skip next");
+                        //     // },
+                        //     child: Container(
+                        //       padding: EdgeInsets.all(10),
+                        //       child: Icon(
+                        //         Icons.skip_next,
+                        //         color: myColors.darkGreen,
+                        //         size: 40,
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
 

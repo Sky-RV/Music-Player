@@ -445,10 +445,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                     await player.pause();
                                   }
                                 },
-                                icon: Icon(currantStatePlay == true ? Icons.pause : Icons.play_arrow, color: myColors.darkGreen,),
+                                icon: Icon(currantStatePlay == false ? Icons.pause : Icons.play_arrow, color: myColors.darkGreen,),
                               ),
                               IconButton(
-                                onPressed: (){},
+                                onPressed: () async {
+                                  // setState(() {
+                                  //   currantStatePlay = !currantStatePlay;
+                                  // });
+                                  if(player.hasNext){
+                                    await player.seekToNext();
+                                    print("skip");
+                                  }
+                                  else{
+                                    print("Not skip");
+                                  }
+                                },
                                 icon: Icon(Icons.skip_next, color: myColors.darkGreen,),
                               ),
                               SizedBox(width: 10,)

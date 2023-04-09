@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:m_player/Provider/Song_Model_Provider.dart';
-import 'package:m_player/UI/Screens/Device/Device_Screen.dart';
+import 'package:m_player/UI/Screens/Device/Device_Screen_Old.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
