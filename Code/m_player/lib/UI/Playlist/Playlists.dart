@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:m_player/UI/Playlist/OfflinePlayList.dart';
+import 'package:m_player/UI/Playlist/OnlinePlaylist.dart';
 import 'package:m_player/Utils/MyColors.dart';
 
 class Playlists extends StatefulWidget {
