@@ -80,20 +80,10 @@ class _PlayNowState extends State<PlayNow> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // IconButton(
-              //   icon: Icon(Icons.arrow_back_ios),
-              //   onPressed: (){
-              //     Navigator.pop(context);
-              //   },
-              // ),
               SizedBox(height: 30,),
               Center(
                 child: Column(
                   children: [
-                    // CircleAvatar(
-                    //   radius: 100,
-                    //   child: Icon(Icons.music_note, size: 80,),
-                    // ),
                     Center(
                       // child: const ArtWorkWidget(),
                       child: QueryArtworkWidget(
@@ -216,57 +206,6 @@ class _PlayNowState extends State<PlayNow> {
                             });
                           },
                         ),
-                        // Flexible(
-                        //   child: InkWell(
-                        //     onTap: (){
-                        //       try {
-                        //         if (widget.audioPlayer.hasNext) {
-                        //           print("before seek next");
-                        //           widget.audioPlayer.seekToNext();
-                        //           print("skip next if condition");
-                        //         }
-                        //         print("skip next");
-                        //       } catch (e) {
-                        //         print("Error seeking to next song: $e");
-                        //       }
-                        //       print(widget.audioPlayer.playerState);
-                        //       print(widget.audioPlayer.hasNext);
-                        //       print(widget.audioPlayer.hasPrevious);
-                        //       print(widget.audioPlayer.currentIndex);
-                        //       print(widget.audioPlayer.audioSource.toString());
-                        //
-                        //     },
-                        //     // onTap: (){
-                        //     //   if(widget.audioPlayer.hasNext){
-                        //     //     print("before seek next");
-                        //     //     widget.audioPlayer.play();  // make sure player is playing
-                        //     //     widget.audioPlayer.seekToNext();
-                        //     //     print("skip next if condition");
-                        //     //     //   print("before seek next");
-                        //     //     //   widget.audioPlayer.seekToNext();
-                        //     //     //   print("skip next if condition");
-                        //     //     //   print(widget.audioPlayer.currentIndex);
-                        //     //
-                        //     //     // try {
-                        //     //     //   widget.audioPlayer.seekToNext();
-                        //     //     //   print("skip music");
-                        //     //     // } catch (error) {
-                        //     //     //   print('Skip next Error: $error');
-                        //     //     // }
-                        //     //
-                        //     //   }
-                        //     //   print("skip next");
-                        //     // },
-                        //     child: Container(
-                        //       padding: EdgeInsets.all(10),
-                        //       child: Icon(
-                        //         Icons.skip_next,
-                        //         color: myColors.darkGreen,
-                        //         size: 40,
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
                       ],
                     ),
 
@@ -347,22 +286,3 @@ class _PlayNowState extends State<PlayNow> {
   }
 
 }
-
-// class ArtWorkWidget extends StatelessWidget {
-//   const ArtWorkWidget({
-//     Key? key,
-//   }) : super(key: key);
-//
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return QueryArtworkWidget(
-//       id: context.watch<Song_Model_Provider>().id,
-//       type: ArtworkType.AUDIO,
-//       artworkHeight: 200.0,
-//       artworkWidth: 200.0,
-//       artworkFit: BoxFit.cover,
-//       nullArtworkWidget: Icon(Icons.music_note, color: myColors.darkGreen, size: 150,),
-//     );
-//   }
-// }

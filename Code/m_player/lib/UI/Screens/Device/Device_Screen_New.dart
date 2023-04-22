@@ -1,6 +1,8 @@
-import 'package:flutter/foundation.dart';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:flutter/foundation.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:m_player/Utils/MyColors.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
@@ -79,6 +81,7 @@ class _Device_Screen_NewState extends State<Device_Screen_New> {
   // }
   final OnAudioQuery _audioQuery = OnAudioQuery();
   final AudioPlayer _player = AudioPlayer();
+  late final SongModel songModel;
 
   List<SongModel> songs = [];
   String currentSongTitle = '';
@@ -162,338 +165,340 @@ class _Device_Screen_NewState extends State<Device_Screen_New> {
     _player.seek(duration);
   }
 
+  void playSong(){
+    try {
+      _player.setAudioSource(
+        AudioSource.uri(
+          Uri.parse(songModel.uri!),
+          tag: MediaItem(
+            id: '${songModel.id}',
+            album: '${songModel.album}',
+            title: '${songModel.displayNameWOExt}',
+            artUri: Uri.parse('https://example.com/albumart.jpg'),
+          ),
+        ),
+      );
+      _player.play();
+      isPlayerViewVisible = true;
+      _isShuffel = false;
+    }
+    on Exception{
+      log("Can not parse song.");
+    }
+    _player.durationStream.listen((d) {
+      setState(() {
+        _duration = d!;
+      });
+    });
+    _player.positionStream.listen((p) {
+      setState(() {
+        _position = p;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     if(isPlayerViewVisible){
       return Scaffold(
-        // appBar: AppBar(
-        //   actions: [
-        //     InkWell(
-        //       onTap: _changePlayerViewVisibility,
-        //       child: Container(
-        //         padding: const EdgeInsets.all(10.0),
-        //         child: Icon(Icons.arrow_back_ios_new, color: myColors.darkGreen,),
-        //       ),
-        //     )
-        //   ],
-        // ),
         body:
         // SingleChildScrollView(
         //   child:
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.only(top: 20, right: 20, left: 26),
-            decoration: BoxDecoration(color: myColors.white),
-            child: Column(
-              children: <Widget>[
-                Flexible(
-                  child: InkWell(
-                    onTap: _changePlayerViewVisibility,
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
-                      child: Icon(Icons.arrow_back_ios_new, color: myColors.darkGreen,),
+        // InkWell(
+        //   onTap: _changePlayerViewVisibility,
+        //   child: Container(
+        //     padding: const EdgeInsets.all(10),
+        //     child: Icon(Icons.arrow_back_ios_new, color: myColors.darkGreen,),
+        //   ),
+        // ),
+          SafeArea(
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.only(top: 20, right: 20, left: 26),
+              decoration: BoxDecoration(color: myColors.white),
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    width: 250,
+                    height: 250,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                    ),
+                    margin: const EdgeInsets.only(bottom: 30),
+                    child: QueryArtworkWidget(
+                      id: songs[currentIndex].id,
+                      type: ArtworkType.AUDIO,
+                      artworkBorder: BorderRadius.circular(200.0),
                     ),
                   ),
-                ),
-                Container(
-                  width: 250,
-                  height: 250,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
-                  margin: const EdgeInsets.only(bottom: 30),
-                  child: QueryArtworkWidget(
-                    id: songs[currentIndex].id,
-                    type: ArtworkType.AUDIO,
-                    artworkBorder: BorderRadius.circular(200.0),
-                  ),
-                ),
 
-                Text(
-                  songs[currentIndex].displayNameWOExt,
-                  // overflow: TextOverflow.fade,
-                  maxLines: 1,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 30,
-                  ),
-                ),
-                SizedBox(height: 10,),
-
-                Text(
-                  songs[currentIndex].artist.toString() == "<unknown>" ? "Unknown Artist" : songs[currentIndex].artist.toString(),
-                  // overflow: TextOverflow.fade,
-                  maxLines: 1,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),
-                ),
-                SizedBox(height: 20,),
-                //
-                // // slider, position and duration widgets
-                // // Column(
-                // //   children: [
-                // //     Container(
-                // //       padding: EdgeInsets.zero,
-                // //       margin: const EdgeInsets.only(bottom: 4.0),
-                // //       decoration: BoxDecoration(
-                // //         borderRadius: BorderRadius.circular(20.0),
-                // //       ),
-                // //       child: StreamBuilder<DurationState>(
-                // //         stream: _durationStateStream,
-                // //         builder: (context, snapshot){
-                // //           final durationState = snapshot.data;
-                // //           final progress = durationState?.position?? Duration.zero;
-                // //           final total = durationState?.total ?? Duration.zero;
-                // //
-                // //           return ProgressBar(
-                // //
-                // //           );
-                // //         },
-                // //       )
-                // //     )
-                // //   ],
-                // // )
-                Row(
-                  children: [
-                    Text(_position.toString().split(".")[0]),
-                    Expanded(
-                      child: Slider(
-                        value: _position.inSeconds.toDouble(),
-                        max: _duration.inSeconds.toDouble(),
-                        min: Duration(microseconds: 0).inSeconds.toDouble(),
-                        activeColor: myColors.yellow,
-                        inactiveColor: myColors.yellow.withOpacity(0.5),
-                        onChanged: (value){
-                          setState(() {
-                            changeToSeconds(value.toInt());
-                            value = value;
-                          });
-                        },
-                      ),
+                  Text(
+                    songs[currentIndex].displayNameWOExt,
+                    // overflow: TextOverflow.fade,
+                    maxLines: 1,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30,
                     ),
-                    Text(_duration.toString().split(".")[0]),
-                  ],
-                ),
+                  ),
+                  SizedBox(height: 10,),
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Flexible(
-                      child: InkWell(
-                        onTap: (){
-                          if(_player.hasPrevious){
-                            _player.seekToPrevious();
-                            print("skip previous if condition");
-                          }
-                          print("skip previous");
-                        },
-                        child: Container(
-                          padding: EdgeInsets.all(10),
-                          child: Icon(
-                            Icons.skip_previous,
-                            color: myColors.darkGreen,
-                            size: 40,
-                          ),
+                  Text(
+                    songs[currentIndex].artist.toString() == "<unknown>" ? "Unknown Artist" : songs[currentIndex].artist.toString(),
+                    // overflow: TextOverflow.fade,
+                    maxLines: 1,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                  SizedBox(height: 20,),
+                  //
+                  // // slider, position and duration widgets
+                  // // Column(
+                  // //   children: [
+                  // //     Container(
+                  // //       padding: EdgeInsets.zero,
+                  // //       margin: const EdgeInsets.only(bottom: 4.0),
+                  // //       decoration: BoxDecoration(
+                  // //         borderRadius: BorderRadius.circular(20.0),
+                  // //       ),
+                  // //       child: StreamBuilder<DurationState>(
+                  // //         stream: _durationStateStream,
+                  // //         builder: (context, snapshot){
+                  // //           final durationState = snapshot.data;
+                  // //           final progress = durationState?.position?? Duration.zero;
+                  // //           final total = durationState?.total ?? Duration.zero;
+                  // //
+                  // //           return ProgressBar(
+                  // //
+                  // //           );
+                  // //         },
+                  // //       )
+                  // //     )
+                  // //   ],
+                  // // )
+                  Row(
+                    children: [
+                      Text(_position.toString().split(".")[0]),
+                      Expanded(
+                        child: Slider(
+                          value: _position.inSeconds.toDouble(),
+                          max: _duration.inSeconds.toDouble(),
+                          min: Duration(microseconds: 0).inSeconds.toDouble(),
+                          activeColor: myColors.yellow,
+                          inactiveColor: myColors.yellow.withOpacity(0.5),
+                          onChanged: (value){
+                            setState(() {
+                              changeToSeconds(value.toInt());
+                              value = value;
+                            });
+                          },
                         ),
                       ),
-                    ),
-                    // IconButton(
-                    //   onPressed: () {
-                    //     setState(() {
-                    //       if(isPlayerViewVisible){
-                    //         _player.pause();
-                    //       }
-                    //       else {
-                    //         _player.play();
-                    //       }
-                    //       isPlayerViewVisible = !isPlayerViewVisible;
-                    //     });
-                    //   },
-                    //   icon: Icon(
-                    //     isPlayerViewVisible ? Icons.pause : Icons.play_arrow,
-                    //     color: myColors.darkGreen, size: 40,
-                    //   ),
-                    // ),
-                    Flexible(
-                      child: InkWell(
-                        onTap: (){
-                          if(_player.playing){
-                            _player.pause();
-                          }
-                          else{
-                            if(_player.currentIndex != null){
-                              _player.play();
+                      Text(_duration.toString().split(".")[0]),
+                    ],
+                  ),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Flexible(
+                        child: InkWell(
+                          onTap: (){
+                            if(_player.hasPrevious){
+                              _player.seekToPrevious();
+                              print("skip previous if condition");
                             }
-                          }
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(20),
-                          margin: const EdgeInsets.only(top: 20, left: 20),
-                          child: StreamBuilder<bool>(
-                            stream: _player.playingStream,
-                            builder: (context, snapshot){
-                              bool? playingState = snapshot.data;
-                              if(playingState != null && playingState){
-                                return Icon(Icons.pause, size: 40, color: myColors.darkGreen,);
-                              }
-                              return Icon(Icons.play_arrow, size: 40, color: myColors.darkGreen,);
-                            },
+                            print("skip previous");
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(10),
+                            child: Icon(
+                              Icons.skip_previous,
+                              color: myColors.darkGreen,
+                              size: 40,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    IconButton(
-                      icon: Icon(
-                        Icons.skip_next,
-                        color: myColors.darkGreen,
-                        size: 40,
-                      ),
-                      onPressed: (){
-                        if(_player.hasNext){
-                          _player.seekToNext();
-                          print("skip previous if condition");
-                        }
-                        // setState(() {
-                        //   try {
-                        //     if (_player.hasNext) {
-                        //       print("before seek next");
-                        //       _player.seekToNext();
-                        //       print("skip next if condition");
-                        //     }
-                        //     print("skip next");
-                        //   } catch (e) {
-                        //     print("Error seeking to next song: $e");
-                        //   }
-                        //   // print(widget.audioPlayer.playerState);
-                        //   // print(widget.audioPlayer.hasNext);
-                        //   // print(widget.audioPlayer.hasPrevious);
-                        //   // print(widget.audioPlayer.currentIndex);
-                        //   // print(widget.audioPlayer.audioSource.toString());
-                        // });
-                      },
-                    ),
-                    // Flexible(
-                    //   child: InkWell(
-                    //     onTap: (){
-                    //       try {
-                    //         if (widget.audioPlayer.hasNext) {
-                    //           print("before seek next");
-                    //           widget.audioPlayer.seekToNext();
-                    //           print("skip next if condition");
-                    //         }
-                    //         print("skip next");
-                    //       } catch (e) {
-                    //         print("Error seeking to next song: $e");
-                    //       }
-                    //       print(widget.audioPlayer.playerState);
-                    //       print(widget.audioPlayer.hasNext);
-                    //       print(widget.audioPlayer.hasPrevious);
-                    //       print(widget.audioPlayer.currentIndex);
-                    //       print(widget.audioPlayer.audioSource.toString());
-                    //
-                    //     },
-                    //     // onTap: (){
-                    //     //   if(widget.audioPlayer.hasNext){
-                    //     //     print("before seek next");
-                    //     //     widget.audioPlayer.play();  // make sure player is playing
-                    //     //     widget.audioPlayer.seekToNext();
-                    //     //     print("skip next if condition");
-                    //     //     //   print("before seek next");
-                    //     //     //   widget.audioPlayer.seekToNext();
-                    //     //     //   print("skip next if condition");
-                    //     //     //   print(widget.audioPlayer.currentIndex);
-                    //     //
-                    //     //     // try {
-                    //     //     //   widget.audioPlayer.seekToNext();
-                    //     //     //   print("skip music");
-                    //     //     // } catch (error) {
-                    //     //     //   print('Skip next Error: $error');
-                    //     //     // }
-                    //     //
-                    //     //   }
-                    //     //   print("skip next");
-                    //     // },
-                    //     child: Container(
-                    //       padding: EdgeInsets.all(10),
-                    //       child: Icon(
-                    //         Icons.skip_next,
-                    //         color: myColors.darkGreen,
-                    //         size: 40,
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
-                  ],
-                ),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Flexible(
-                      child: InkWell(
-                        onTap: (){
-                          //_changePlayerViewVisibility();
-                          Navigator.pop(context);
-                        },
-                        child: Container(
-                          padding: EdgeInsets.all(10),
-                          child: Icon(Icons.list_rounded, color: myColors.darkGreen,),
-                        ),
-                      ),
-                    ),
-                    Flexible(
-                      child: InkWell(
-                        onTap: (){
-                          _player.loopMode == LoopMode.one ? _player.setLoopMode(LoopMode.all) : _player.setLoopMode(LoopMode.one);
-                        },
-                        child: Container(
-                          padding: EdgeInsets.all(10),
-                          child: StreamBuilder<LoopMode>(
-                            stream: _player.loopModeStream,
-                            builder: (context, snapchat){
-                              final loopMode = snapchat.data;
-                              if(LoopMode.one == loopMode){
-                                return Icon(Icons.repeat_one, color: myColors.yellow,);
-                              }
-                              return Icon(Icons.repeat, color: myColors.darkGreen,);
-                            },
-                          ),
-                        ),
-                      ),
-                    ),
-                    Flexible(
-                      child: InkWell(
-                        onTap: (){
-                          setState(() {
-                            if(_isShuffel){
-                              _player.setShuffleModeEnabled(true);
+                      // IconButton(
+                      //   onPressed: () {
+                      //     setState(() {
+                      //       if(isPlayerViewVisible){
+                      //         _player.pause();
+                      //       }
+                      //       else {
+                      //         _player.play();
+                      //       }
+                      //       isPlayerViewVisible = !isPlayerViewVisible;
+                      //     });
+                      //   },
+                      //   icon: Icon(
+                      //     isPlayerViewVisible ? Icons.pause : Icons.play_arrow,
+                      //     color: myColors.darkGreen, size: 40,
+                      //   ),
+                      // ),
+                      Flexible(
+                        child: InkWell(
+                          onTap: (){
+                            if(_player.playing){
+                              _player.pause();
                             }
                             else{
-                              _player.setShuffleModeEnabled(false);
+                              if(_player.currentIndex != null){
+                                _player.play();
+                              }
                             }
-                            _isShuffel = !_isShuffel;
-                          });
-                        },
-                        child: Container(
-                          padding: EdgeInsets.all(10),
-                          child: Icon(
-                              Icons.shuffle,
-                              color: _isShuffel? myColors.yellow : myColors.darkGreen
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(20),
+                            margin: const EdgeInsets.only(top: 20, left: 20),
+                            child: StreamBuilder<bool>(
+                              stream: _player.playingStream,
+                              builder: (context, snapshot){
+                                bool? playingState = snapshot.data;
+                                if(playingState != null && playingState){
+                                  return Icon(Icons.pause, size: 40, color: myColors.darkGreen,);
+                                }
+                                return Icon(Icons.play_arrow, size: 40, color: myColors.darkGreen,);
+                              },
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                )
-              ],
+                      IconButton(
+                        icon: Icon(
+                          Icons.skip_next,
+                          color: myColors.darkGreen,
+                          size: 40,
+                        ),
+                        onPressed: (){
+                          if(_player.hasNext){
+                            _player.seekToNext();
+                            print("skip previous if condition");
+                          }
+                        },
+                      ),
+                      // Flexible(
+                      //   child: InkWell(
+                      //     onTap: (){
+                      //       try {
+                      //         if (widget.audioPlayer.hasNext) {
+                      //           print("before seek next");
+                      //           widget.audioPlayer.seekToNext();
+                      //           print("skip next if condition");
+                      //         }
+                      //         print("skip next");
+                      //       } catch (e) {
+                      //         print("Error seeking to next song: $e");
+                      //       }
+                      //       print(widget.audioPlayer.playerState);
+                      //       print(widget.audioPlayer.hasNext);
+                      //       print(widget.audioPlayer.hasPrevious);
+                      //       print(widget.audioPlayer.currentIndex);
+                      //       print(widget.audioPlayer.audioSource.toString());
+                      //
+                      //     },
+                      //     // onTap: (){
+                      //     //   if(widget.audioPlayer.hasNext){
+                      //     //     print("before seek next");
+                      //     //     widget.audioPlayer.play();  // make sure player is playing
+                      //     //     widget.audioPlayer.seekToNext();
+                      //     //     print("skip next if condition");
+                      //     //     //   print("before seek next");
+                      //     //     //   widget.audioPlayer.seekToNext();
+                      //     //     //   print("skip next if condition");
+                      //     //     //   print(widget.audioPlayer.currentIndex);
+                      //     //
+                      //     //     // try {
+                      //     //     //   widget.audioPlayer.seekToNext();
+                      //     //     //   print("skip music");
+                      //     //     // } catch (error) {
+                      //     //     //   print('Skip next Error: $error');
+                      //     //     // }
+                      //     //
+                      //     //   }
+                      //     //   print("skip next");
+                      //     // },
+                      //     child: Container(
+                      //       padding: EdgeInsets.all(10),
+                      //       child: Icon(
+                      //         Icons.skip_next,
+                      //         color: myColors.darkGreen,
+                      //         size: 40,
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+                    ],
+                  ),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Flexible(
+                        child: InkWell(
+                          onTap: (){
+                            //_changePlayerViewVisibility();
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(10),
+                            child: Icon(Icons.list_rounded, color: myColors.darkGreen,),
+                          ),
+                        ),
+                      ),
+                      Flexible(
+                        child: InkWell(
+                          onTap: (){
+                            _player.loopMode == LoopMode.one ? _player.setLoopMode(LoopMode.all) : _player.setLoopMode(LoopMode.one);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(10),
+                            child: StreamBuilder<LoopMode>(
+                              stream: _player.loopModeStream,
+                              builder: (context, snapchat){
+                                final loopMode = snapchat.data;
+                                if(LoopMode.one == loopMode){
+                                  return Icon(Icons.repeat_one, color: myColors.yellow,);
+                                }
+                                return Icon(Icons.repeat, color: myColors.darkGreen,);
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                      Flexible(
+                        child: InkWell(
+                          onTap: (){
+                            setState(() {
+                              if(_isShuffel){
+                                _player.setShuffleModeEnabled(true);
+                              }
+                              else{
+                                _player.setShuffleModeEnabled(false);
+                              }
+                              _isShuffel = !_isShuffel;
+                            });
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(10),
+                            child: Icon(
+                                Icons.shuffle,
+                                color: _isShuffel? myColors.yellow : myColors.darkGreen
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
         //),
@@ -569,9 +574,9 @@ class _Device_Screen_NewState extends State<Device_Screen_New> {
 
 }
 
-class DurationState{
-  Duration position, total;
-
-  DurationState({this.position = Duration.zero, this.total = Duration.zero});
-  
+class DurationState {
+  Duration position;
+  Duration total;
+  Duration buffered;
+  DurationState({this.position = Duration.zero, this.total = Duration.zero, this.buffered = Duration.zero});
 }
