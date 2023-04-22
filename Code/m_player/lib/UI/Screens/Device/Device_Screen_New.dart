@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:just_audio_background/just_audio_background.dart';
+import 'package:m_player/Models/Music/Music_Model.dart';
 import 'package:m_player/Utils/MyColors.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
@@ -13,7 +14,7 @@ class Device_Screen_New extends StatefulWidget {
   State<Device_Screen_New> createState() => _Device_Screen_NewState();
 }
 
-class _Device_Screen_NewState extends State<Device_Screen_New> {
+class _Device_Screen_NewState extends State<Device_Screen_New>{
 
   // final OnAudioQuery _audioQuery = OnAudioQuery();
   // final AudioPlayer _audioPlayer = AudioPlayer();
@@ -498,7 +499,7 @@ class _Device_Screen_NewState extends State<Device_Screen_New> {
                       Flexible(
                         child: InkWell(
                           onTap: (){
-                            
+
                           },
                           child: Container(
                             padding: EdgeInsets.all(10),
@@ -519,6 +520,22 @@ class _Device_Screen_NewState extends State<Device_Screen_New> {
       );
     }
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: myColors.white,
+        shadowColor: myColors.green,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+        actions: [
+          IconButton(
+            onPressed: (){
+              showSearch(
+                  context: context,
+                  delegate: CustomSearch()
+              );
+            },
+            icon: Icon(Icons.search, color: myColors.darkGreen,),
+          )
+        ],
+      ),
       body: FutureBuilder<List<SongModel>>(
         future: _audioQuery.querySongs(
             sortType: null,
@@ -593,4 +610,70 @@ class DurationState {
   Duration total;
   Duration buffered;
   DurationState({this.position = Duration.zero, this.total = Duration.zero, this.buffered = Duration.zero});
+}
+
+class CustomSearch extends SearchDelegate{
+
+  List<String> allData = ["l","lklk"];
+
+  @override
+  List<Widget>? buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: Icon(Icons.clear),
+        onPressed: (){
+          query = '';
+        },
+      )
+    ];
+  }
+
+  @override
+  Widget? buildLeading(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.arrow_back_ios_new),
+      onPressed: (){
+        close(context, null);
+      },
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    List<String> matchQuery = [];
+    for(var item in allData){
+      if(item.toLowerCase().contains(query.toLowerCase())){
+        matchQuery.add(item);
+      }
+    }
+    return ListView.builder(
+      itemCount: matchQuery.length,
+      itemBuilder: (context, index){
+        var result = matchQuery[index];
+        return ListTile(
+          title: Text(result),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    List<String> matchQuery = [];
+    for(var item in allData){
+      if(item.toLowerCase().contains(query.toLowerCase())){
+        matchQuery.add(item);
+      }
+    }
+    return ListView.builder(
+      itemCount: matchQuery.length,
+      itemBuilder: (context, index){
+        var result = matchQuery[index];
+        return ListTile(
+          title: Text(result),
+        );
+      },
+    );
+  }
+
 }
