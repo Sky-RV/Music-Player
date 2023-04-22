@@ -495,6 +495,20 @@ class _Device_Screen_NewState extends State<Device_Screen_New> {
                           ),
                         ),
                       ),
+                      Flexible(
+                        child: InkWell(
+                          onTap: (){
+                            
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(10),
+                            child: Icon(
+                                Icons.add,
+                                color: myColors.darkGreen
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   )
                 ],

@@ -1,6 +1,7 @@
 import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:m_player/UI/Device/mainDevice.dart';
+import 'package:m_player/UI/Playlist/Playlists.dart';
 import 'package:m_player/UI/Screens/Category/Category_Screen.dart';
 import 'package:m_player/UI/Screens/Device/Device_Screen_New.dart';
 import 'package:m_player/UI/Screens/Device/Device_Screen_Old.dart';
@@ -20,7 +21,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   List<Widget> bodyScreens = [
     HomeScreen(),
     CategoryScreen(),
-    Device_Screen_New()
+    Playlists(),
+    Device_Screen_New(),
     // DeviceScreen()
   ];
 
@@ -59,6 +61,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
           FloatingNavbarItem(
               icon: Icons.category,
               title: "Category"
+          ),
+
+          FloatingNavbarItem(
+              icon: Icons.playlist_play_rounded,
+              title: "Playlists"
           ),
 
           FloatingNavbarItem(
