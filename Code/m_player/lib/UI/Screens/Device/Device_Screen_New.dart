@@ -446,7 +446,7 @@ class _Device_Screen_NewState extends State<Device_Screen_New>{
                         child: InkWell(
                           onTap: (){
                             //_changePlayerViewVisibility();
-                            Navigator.pop(context);
+                            //Navigator.pop(context);
                           },
                           child: Container(
                             padding: EdgeInsets.all(10),
@@ -526,6 +526,56 @@ class _Device_Screen_NewState extends State<Device_Screen_New>{
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
         actions: [
           IconButton(
+            // onPressed: (){
+            //   // Column(
+            //   //   children: [
+            //   //     Expanded(
+            //   //       child: FutureBuilder<List<SongModel>>(
+            //   //         future: _audioQuery.querySongs(
+            //   //           sortType: null,
+            //   //             orderType: OrderType.ASC_OR_SMALLER,
+            //   //             uriType: UriType.EXTERNAL,
+            //   //             ignoreCase: true
+            //   //         ),
+            //   //         builder: (context, item){
+            //   //           if(item.data == null){
+            //   //             return const Center(child: CircularProgressIndicator(),);
+            //   //           }
+            //   //           if(item.data!.isEmpty){
+            //   //             return const Center(child: Text("No Music Found"),);
+            //   //           }
+            //   //           songs.clear();
+            //   //           songs = item.data!;
+            //   //           return ListView.builder(
+            //   //             itemCount: item.data!.length,
+            //   //             itemBuilder: (context, index){
+            //   //               return ListTile(
+            //   //                 leading: QueryArtworkWidget(
+            //   //                   id: item.data![index].id,
+            //   //                   type: ArtworkType.AUDIO,
+            //   //                   nullArtworkWidget: Icon(Icons.music_note),
+            //   //                 ),
+            //   //                 title: Text(item.data![index].title),
+            //   //                 subtitle: Text("${item.data![index].artist}"),
+            //   //                 onTap: () async {
+            //   //                   _changePlayerViewVisibility();
+            //   //                   // String? uri = item.data![index].uri;
+            //   //                   // await _player.setAudioSource(
+            //   //                   //   AudioSource.uri(Uri.parse(uri!))
+            //   //                   // );
+            //   //                   await _player.setAudioSource(createPlaylist(item.data!), initialIndex: index);
+            //   //                   await _player.play();
+            //   //                   toast(context, item.data![index].title.toString());
+            //   //                 },
+            //   //               );
+            //   //             },
+            //   //           );
+            //   //         },
+            //   //       ),
+            //   //     )
+            //   //   ],
+            //   // );
+            // },
             onPressed: (){
               showSearch(
                   context: context,
@@ -614,7 +664,19 @@ class DurationState {
 
 class CustomSearch extends SearchDelegate{
 
-  List<String> allData = ["l","lklk"];
+  final OnAudioQuery _audioQuery = OnAudioQuery();
+  final AudioPlayer _player = AudioPlayer();
+  late final SongModel songModel;
+
+  querySongs() async {
+    // DEFAULT:
+    // SongSortType.TITLE,
+    // OrderType.ASC_OR_SMALLER,
+    // UriType.EXTERNAL,
+    List<SongModel> allData = await OnAudioQuery().querySongs(sortType: SongSortType.TITLE);
+  }
+
+  List<String> allData = ['rfer', 'referf'];
 
   @override
   List<Widget>? buildActions(BuildContext context) {

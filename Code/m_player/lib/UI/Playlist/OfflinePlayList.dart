@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:m_player/Utils/MyColors.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 
 class OfflinePlaylist extends StatefulWidget {
   const OfflinePlaylist({Key? key}) : super(key: key);
@@ -10,67 +12,357 @@ class OfflinePlaylist extends StatefulWidget {
 
 class _OfflinePlaylistState extends State<OfflinePlaylist> {
 
+  final OnAudioQuery _audioQuery = OnAudioQuery();
+  final AudioPlayer _player = AudioPlayer();
+  late final SongModel songModel;
+  TextEditingController playlistName = TextEditingController();
+  List<PlaylistModel> playlist = [];
+  late ConcatenatingAudioSource _playlist;
+
+  queryPlaylists() async {
+    // DEFAULT:
+    // PlaylistSortType.NAME,
+    // OrderType.ASC_OR_SMALLER
+    List<PlaylistModel> something = await OnAudioQuery().queryPlaylists(ignoreCase: true);
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Create Playlist", style: TextStyle(fontSize: 18),),
-                Flexible(
-                  child: InkWell(
-                    onTap: () async {
-                      await showDialog<String>(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            contentPadding: const EdgeInsets.all(16.0),
-                            content: new Row(
-                              children: <Widget>[
-                                new Expanded(
-                                  child: new TextField(
-                                    autofocus: true,
-                                    decoration: new InputDecoration(
-                                        labelText: 'Playlist Name'),
-                                  ),
-                                )
-                              ],
-                            ),
-                            actions: <Widget>[
-                              new TextButton(
-                                  child: const Text('Cancel'),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  }),
-                              new TextButton(
-                                  child: const Text('Save'),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  })
-                            ],
-                          );
-                        },
-                      );
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(10),
-                      child: Icon(
-                          Icons.playlist_add,
-                          size: 30,
-                          color: myColors.green,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            )
-          ],
+
+      floatingActionButton: Container(
+        margin: EdgeInsets.only(bottom: 60),
+        child: FloatingActionButton(
+          backgroundColor: myColors.yellow,
+          foregroundColor: myColors.darkGreen,
+          child: Icon(Icons.add),
+          onPressed: () {},
         ),
+      ),
+
+      body: FutureBuilder<List<PlaylistModel>>(
+        future: _audioQuery.queryPlaylists(
+            sortType: null,
+            orderType: OrderType.ASC_OR_SMALLER,
+            uriType: UriType.EXTERNAL,
+            ignoreCase: true
+        ),
+        builder: (context, item){
+          if(item.data == null){
+            return const Center(child: CircularProgressIndicator(),);
+          }
+          if(item.data!.isEmpty){
+            return const Center(child: Text("No Playlist."),);
+          }
+          playlist.clear();
+          playlist = item.data!;
+          return ListView.builder(
+              itemCount: item.data!.length,
+              itemBuilder: (context, index){
+                return Container(
+                  margin: EdgeInsets.all(5),
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                      color: myColors.white,
+                      borderRadius: BorderRadius.circular(20.0),
+                      boxShadow: const[
+                        BoxShadow(
+                            blurRadius: 4.0,
+                            offset: Offset(-4, -4),
+                            color: Colors.white24
+                        ),
+                        BoxShadow(
+                            blurRadius: 4.0,
+                            offset: Offset(4, 4),
+                            color: Colors.black26
+                        )
+                      ]
+                  ),
+                  child: ListTile(
+                    leading: QueryArtworkWidget(
+                      id: item.data![index].id,
+                      type: ArtworkType.AUDIO,
+                      nullArtworkWidget: Icon(Icons.music_note),
+                    ),
+                    title: Text(item.data![index].playlist),
+                    subtitle: Text("${item.data![index].numOfSongs}"),
+                    onTap: () async {
+                      // _changePlayerViewVisibility();
+                      // // String? uri = item.data![index].uri;
+                      // // await _player.setAudioSource(
+                      // //   AudioSource.uri(Uri.parse(uri!))
+                      // // );
+                      // await _player.setAudioSource(createPlaylist(item.data!), initialIndex: index);
+                      // await _player.play();
+                      // toast(context, item.data![index].title.toString());
+                    },
+                  ),
+                );
+              }
+          );
+        },
       ),
     );
   }
 }
+
+// import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
+// import 'package:flutter/material.dart';
+// import 'package:m_player/Manager/Page_Manager.dart';
+// import 'package:m_player/Manager/Play_Button_Notifier.dart';
+// import 'package:m_player/Manager/Progress_Notifier.dart';
+// import 'package:m_player/Manager/Repeat_Button_Notifier.dart';
+//
+// class OfflinePlaylist extends StatefulWidget {
+//   @override
+//   _MyAppState createState() => _MyAppState();
+// }
+//
+// // use GetIt or Provider rather than a global variable in a real project
+// late final PageManager _pageManager;
+//
+// class _MyAppState extends State<OfflinePlaylist> {
+//   @override
+//   void initState() {
+//     super.initState();
+//     _pageManager = PageManager();
+//   }
+//
+//   @override
+//   void dispose() {
+//     _pageManager.dispose();
+//     super.dispose();
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       home: Scaffold(
+//         body: Padding(
+//           padding: const EdgeInsets.all(20.0),
+//           child: Column(
+//             children: [
+//               CurrentSongTitle(),
+//               Playlist(),
+//               AddRemoveSongButtons(),
+//               AudioProgressBar(),
+//               AudioControlButtons(),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+//
+// class CurrentSongTitle extends StatelessWidget {
+//   const CurrentSongTitle({Key? key}) : super(key: key);
+//   @override
+//   Widget build(BuildContext context) {
+//     return ValueListenableBuilder<String>(
+//       valueListenable: _pageManager.currentSongTitleNotifier,
+//       builder: (_, title, __) {
+//         return Padding(
+//           padding: const EdgeInsets.only(top: 8.0),
+//           child: Text(title, style: TextStyle(fontSize: 40)),
+//         );
+//       },
+//     );
+//   }
+// }
+//
+// class Playlist extends StatelessWidget {
+//   const Playlist({Key? key}) : super(key: key);
+//   @override
+//   Widget build(BuildContext context) {
+//     return Expanded(
+//       child: ValueListenableBuilder<List<String>>(
+//         valueListenable: _pageManager.playlistNotifier,
+//         builder: (context, playlistTitles, _) {
+//           return ListView.builder(
+//             itemCount: playlistTitles.length,
+//             itemBuilder: (context, index) {
+//               return ListTile(
+//                 title: Text('${playlistTitles[index]}'),
+//               );
+//             },
+//           );
+//         },
+//       ),
+//     );
+//   }
+// }
+//
+// class AddRemoveSongButtons extends StatelessWidget {
+//   const AddRemoveSongButtons({Key? key}) : super(key: key);
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//       padding: const EdgeInsets.only(bottom: 20.0),
+//       child: Row(
+//         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//         children: [
+//           FloatingActionButton(
+//             onPressed: _pageManager.addSong,
+//             child: Icon(Icons.add),
+//           ),
+//           FloatingActionButton(
+//             onPressed: _pageManager.removeSong,
+//             child: Icon(Icons.remove),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
+//
+// class AudioProgressBar extends StatelessWidget {
+//   const AudioProgressBar({Key? key}) : super(key: key);
+//   @override
+//   Widget build(BuildContext context) {
+//     return ValueListenableBuilder<ProgressBarState>(
+//       valueListenable: _pageManager.progressNotifier,
+//       builder: (_, value, __) {
+//         return ProgressBar(
+//           progress: value.current,
+//           buffered: value.buffered,
+//           total: value.total,
+//           onSeek: _pageManager.seek,
+//         );
+//       },
+//     );
+//   }
+// }
+//
+// class AudioControlButtons extends StatelessWidget {
+//   const AudioControlButtons({Key? key}) : super(key: key);
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       height: 60,
+//       child: Row(
+//         mainAxisAlignment: MainAxisAlignment.spaceAround,
+//         children: [
+//           RepeatButton(),
+//           PreviousSongButton(),
+//           PlayButton(),
+//           NextSongButton(),
+//           ShuffleButton(),
+//         ],
+//       ),
+//     );
+//   }
+// }
+//
+// class RepeatButton extends StatelessWidget {
+//   const RepeatButton({Key? key}) : super(key: key);
+//   @override
+//   Widget build(BuildContext context) {
+//     return ValueListenableBuilder<RepeatState>(
+//       valueListenable: _pageManager.repeatButtonNotifier,
+//       builder: (context, value, child) {
+//         Icon icon;
+//         switch (value) {
+//           case RepeatState.off:
+//             icon = Icon(Icons.repeat, color: Colors.grey);
+//             break;
+//           case RepeatState.repeatSong:
+//             icon = Icon(Icons.repeat_one);
+//             break;
+//           case RepeatState.repeatPlaylist:
+//             icon = Icon(Icons.repeat);
+//             break;
+//         }
+//         return IconButton(
+//           icon: icon,
+//           onPressed: _pageManager.onRepeatButtonPressed,
+//         );
+//       },
+//     );
+//   }
+// }
+//
+// class PreviousSongButton extends StatelessWidget {
+//   const PreviousSongButton({Key? key}) : super(key: key);
+//   @override
+//   Widget build(BuildContext context) {
+//     return ValueListenableBuilder<bool>(
+//       valueListenable: _pageManager.isFirstSongNotifier,
+//       builder: (_, isFirst, __) {
+//         return IconButton(
+//           icon: Icon(Icons.skip_previous),
+//           onPressed:
+//           (isFirst) ? null : _pageManager.onPreviousSongButtonPressed,
+//         );
+//       },
+//     );
+//   }
+// }
+//
+// class PlayButton extends StatelessWidget {
+//   const PlayButton({Key? key}) : super(key: key);
+//   @override
+//   Widget build(BuildContext context) {
+//     return ValueListenableBuilder<ButtonState>(
+//       valueListenable: _pageManager.playButtonNotifier,
+//       builder: (_, value, __) {
+//         switch (value) {
+//           case ButtonState.loading:
+//             return Container(
+//               margin: EdgeInsets.all(8.0),
+//               width: 32.0,
+//               height: 32.0,
+//               child: CircularProgressIndicator(),
+//             );
+//           case ButtonState.paused:
+//             return IconButton(
+//               icon: Icon(Icons.play_arrow),
+//               iconSize: 32.0,
+//               onPressed: _pageManager.play,
+//             );
+//           case ButtonState.playing:
+//             return IconButton(
+//               icon: Icon(Icons.pause),
+//               iconSize: 32.0,
+//               onPressed: _pageManager.pause,
+//             );
+//         }
+//       },
+//     );
+//   }
+// }
+//
+// class NextSongButton extends StatelessWidget {
+//   const NextSongButton({Key? key}) : super(key: key);
+//   @override
+//   Widget build(BuildContext context) {
+//     return ValueListenableBuilder<bool>(
+//       valueListenable: _pageManager.isLastSongNotifier,
+//       builder: (_, isLast, __) {
+//         return IconButton(
+//           icon: Icon(Icons.skip_next),
+//           onPressed: (isLast) ? null : _pageManager.onNextSongButtonPressed,
+//         );
+//       },
+//     );
+//   }
+// }
+//
+// class ShuffleButton extends StatelessWidget {
+//   const ShuffleButton({Key? key}) : super(key: key);
+//   @override
+//   Widget build(BuildContext context) {
+//     return ValueListenableBuilder<bool>(
+//       valueListenable: _pageManager.isShuffleModeEnabledNotifier,
+//       builder: (context, isEnabled, child) {
+//         return IconButton(
+//           icon: (isEnabled)
+//               ? Icon(Icons.shuffle)
+//               : Icon(Icons.shuffle, color: Colors.grey),
+//           onPressed: _pageManager.onShuffleButtonPressed,
+//         );
+//       },
+//     );
+//   }
+// }
