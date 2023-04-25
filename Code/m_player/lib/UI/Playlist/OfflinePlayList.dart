@@ -68,6 +68,8 @@ class _OfflinePlaylistState extends State<OfflinePlaylist> {
                             String name = playlistName.text.toString();
                             print(name);
                             await OnAudioQuery.platform.createPlaylist(name);
+                            playlistName.clear();
+                            Navigator.of(context).pop();
                           });
                         }
                         )

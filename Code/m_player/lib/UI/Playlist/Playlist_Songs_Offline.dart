@@ -9,6 +9,7 @@ import 'package:just_audio_background/just_audio_background.dart';
 import 'package:m_player/Models/Music/Music_Model.dart';
 import 'package:m_player/Utils/MyColors.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+// import 'package:flutter_audio_query/flutter_audio_query.dart';
 
 class PlaylistSongsOffline extends StatefulWidget {
   const PlaylistSongsOffline({Key? key, required this.playlistModel}) : super(key: key);
@@ -389,11 +390,8 @@ class _PlaylistSongsOfflineState extends State<PlaylistSongsOffline> {
         ],
       ),
       body: FutureBuilder<List<SongModel>>(
-        future: OnAudioQuery.platform.querySongs(
-            sortType: null,
-            orderType: OrderType.ASC_OR_SMALLER,
-            uriType: UriType.EXTERNAL,
-            ignoreCase: true
+        future: _audioQuery.queryWithFilters(
+            //{sortType: SongSortType.DATE_ADDED,}
         ),
         builder: (context, item){
           if(item.data == null){
