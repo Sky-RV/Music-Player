@@ -436,7 +436,7 @@ class _PlaylistSongsOfflineState extends State<PlaylistSongsOffline> {
                     subtitle: Text("${item.data![index].artist}"),
                     trailing: IconButton(
                       icon: Icon(Icons.delete),
-                      onPressed: ()async{
+                      onPressed: () async {
                         setState(() async {
                           await OnAudioQuery.platform.removeFromPlaylist(widget.playlistModel.id, item.data![index].id);
                         });
