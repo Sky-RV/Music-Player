@@ -1,11 +1,17 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:m_player/Models/Album/Album_Model.dart';
 import 'package:m_player/Models/Album_Base/Album_Base_Model.dart';
 import 'package:m_player/Models/Latest_Music/Latest_Music_Model.dart';
+import 'package:m_player/Models/Music/Music_Model.dart';
 import 'package:m_player/Network/Rest_Client.dart';
 import 'package:m_player/Utils/MyColors.dart';
+import 'package:on_audio_query/on_audio_query.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class Album_Musics_Screen extends StatefulWidget {
 
@@ -22,12 +28,71 @@ class _Album_MusicsState extends State<Album_Musics_Screen> {
   late Rest_Client rest_client;
   late Future<Latest_Music_Model> getMusics;
 
+  final OnAudioQuery _audioQuery = OnAudioQuery();
+  final AudioPlayer _audioPlayer = AudioPlayer();
+
+  List<Music_Model> songs = [];
+  String currentTitle = '';
+  int currentIndex = 0;
+  bool isPlaying = false;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     rest_client = Rest_Client(dio);
     getMusics = rest_client.getMusicsByAlbum(widget.album.aid!);
+    requestPermission();
+    _audioPlayer.currentIndexStream.listen((index) {
+      if(index != null){
+        _updateCurrentPlaySongDetails(index);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _audioPlayer.dispose();
+  }
+
+  void requestPermission(){
+    Permission.storage.request();
+  }
+
+  void _changePlayerViewVisibility(){
+    setState(() {
+      isPlaying = !isPlaying;
+    });
+  }
+
+  playSong(String? uri){
+    try {
+      _audioPlayer.setAudioSource(
+          AudioSource.uri(Uri.parse(uri!))
+      );
+      _audioPlayer.play();
+    } on Exception {
+      log("Error parsing song");
+    }
+  }
+
+  ConcatenatingAudioSource createPlaylist(List<Music_Model> songs){
+    List<AudioSource> sources = [];
+    for (var song in songs){
+      sources.add(AudioSource.uri(Uri.parse(song.mp3_url!)));
+    }
+    return ConcatenatingAudioSource(children: sources);
+  }
+
+  void _updateCurrentPlaySongDetails(int index){
+    setState(() {
+      if(songs.isNotEmpty){
+        currentTitle = songs[index].mp3_title.toString();
+        currentIndex = index;
+      }
+    });
   }
 
   @override
@@ -53,67 +118,24 @@ class _Album_MusicsState extends State<Album_Musics_Screen> {
         child: FutureBuilder<Latest_Music_Model>(
           future: getMusics,
           builder: (context, snapshot){
-            if (snapshot.hasData){
+            if(snapshot.hasData){
               return Container(
-                child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                  ),
+                child: ListView.builder(
                   itemCount: snapshot.data!.musics!.length,
                   itemBuilder: (context, index){
-                    return GestureDetector(
-                      onTap: (){
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(builder: (context) => MusicsCategoryScreen(category: snapshot.data!.musics![index],))
-                        // );
-                      },
-                      child: CachedNetworkImage(
-                        width: 164,
-                        height: 164,
+                    return ListTile(
+                      // leading: QueryArtworkWidget(
+                      //   id: int.parse(snapshot.data!.musics![index].id.toString()),
+                      //   type: ArtworkType.AUDIO,
+                      //   nullArtworkWidget: Icon(Icons.music_note),
+                      // ),
+                      leading: CachedNetworkImage(
+                        width: 64,
+                        height: 64,
                         imageUrl: "${snapshot.data!.musics![index].mp3_thumbnail_b}",
-                        imageBuilder: (context, imageProvider) => Container(
-                          margin: EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15.0),
-                            image: DecorationImage(
-                              image: imageProvider,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          child: Stack(
-                            children: [
-                              Positioned(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                          colors: [
-                                            Colors.yellow.shade50,
-                                            myColors.yellow,
-                                            Colors.yellow.shade50
-                                          ]
-                                      )
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      "${snapshot.data!.musics![index].mp3_title}",
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          color: myColors.darkGreen
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                bottom: 5,
-                                right: 0,
-                                left: 0,
-                              )
-                            ],
-                          ),
-                        ),
-                        placeholder: (context, url) => CircularProgressIndicator(),
-                        errorWidget: (context, url, error) => Icon(Icons.error),
                       ),
+                      title: Text(snapshot.data!.musics![index].mp3_title.toString()),
+                      subtitle: Text(snapshot.data!.musics![index].mp3_artist.toString()),
                     );
                   },
                 ),

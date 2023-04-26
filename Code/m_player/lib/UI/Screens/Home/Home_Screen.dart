@@ -175,7 +175,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   ),
                                                   child: Center(
                                                     child: Text(
-                                                      "${snapshot.data!.musics![index].mp3_artist}",
+                                                      "${snapshot.data!.musics![index].mp3_title}",
                                                       style: TextStyle(
                                                           fontSize: 14,
                                                           color: myColors.darkGreen

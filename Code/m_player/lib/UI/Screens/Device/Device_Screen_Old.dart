@@ -38,6 +38,7 @@ class _DeviceScreen extends State<DeviceScreen>{
       }
     });
   }
+
   @override
   void dispose() {
     // TODO: implement dispose
