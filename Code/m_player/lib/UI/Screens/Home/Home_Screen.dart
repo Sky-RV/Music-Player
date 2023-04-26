@@ -10,6 +10,7 @@ import 'package:m_player/Models/Latest_Music/Latest_Music_Model.dart';
 import 'package:m_player/Models/Music/Music_Model.dart';
 import 'package:m_player/Models/Playlist_Base/Playlist_Base_Model.dart';
 import 'package:m_player/Network/Rest_Client.dart';
+import 'package:m_player/UI/Screens/Album/Album_Musics.dart';
 import 'package:m_player/Utils/MyColors.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:miniplayer/miniplayer.dart';
@@ -38,6 +39,9 @@ class _HomeScreenState extends State<HomeScreen> {
   bool currantStatePlay = false;
 
   final player = AudioPlayer();
+
+  Duration _duration = const Duration();
+  Duration _position = const Duration();
 
   @override
   void initState() {
@@ -244,51 +248,59 @@ class _HomeScreenState extends State<HomeScreen> {
                                   itemCount: snapshot.data!.albums!.length,
                                   scrollDirection: Axis.horizontal,
                                   itemBuilder: (context, index){
-                                    return CachedNetworkImage(
-                                      width: 180,
-                                      height: 160,
-                                      imageUrl: "${snapshot.data!.albums![index].album_image}",
-                                      imageBuilder: (context, imageProvider) => Container(
-                                        margin: EdgeInsets.all(8),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(15.0),
-                                          image: DecorationImage(
-                                            image: imageProvider,
-                                            fit: BoxFit.cover,
+                                    return GestureDetector(
+                                      onTap: (){
+                                        Navigator.push( //category: snapshot.data!.category![index],
+                                            context,
+                                            MaterialPageRoute(builder: (context) => Album_Musics_Screen(album: snapshot.data!.albums![index]))
+                                        );
+                                      },
+                                      child: CachedNetworkImage(
+                                        width: 180,
+                                        height: 160,
+                                        imageUrl: "${snapshot.data!.albums![index].album_image}",
+                                        imageBuilder: (context, imageProvider) => Container(
+                                          margin: EdgeInsets.all(8),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(15.0),
+                                            image: DecorationImage(
+                                              image: imageProvider,
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),
-                                        ),
-                                        child: Stack(
-                                          children: [
-                                            Positioned(
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                    gradient: LinearGradient(
-                                                        colors: [
-                                                          Colors.yellow.shade50,
-                                                          myColors.yellow,
-                                                          Colors.yellow.shade50
-                                                        ]
-                                                    )
-                                                ),
-                                                child: Center(
-                                                  child: Text(
-                                                    "${snapshot.data!.albums![index].album_name}",
-                                                    style: TextStyle(
-                                                        fontSize: 14,
-                                                        color: myColors.darkGreen
+                                          child: Stack(
+                                            children: [
+                                              Positioned(
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                      gradient: LinearGradient(
+                                                          colors: [
+                                                            Colors.yellow.shade50,
+                                                            myColors.yellow,
+                                                            Colors.yellow.shade50
+                                                          ]
+                                                      )
+                                                  ),
+                                                  child: Center(
+                                                    child: Text(
+                                                      "${snapshot.data!.albums![index].album_name}",
+                                                      style: TextStyle(
+                                                          fontSize: 14,
+                                                          color: myColors.darkGreen
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                              bottom: 5,
-                                              right: 0,
-                                              left: 0,
-                                            )
-                                          ],
+                                                bottom: 5,
+                                                right: 0,
+                                                left: 0,
+                                              )
+                                            ],
+                                          ),
                                         ),
+                                        placeholder: (context, url) => CircularProgressIndicator(),
+                                        errorWidget: (context, url, error) => Icon(Icons.error),
                                       ),
-                                      placeholder: (context, url) => CircularProgressIndicator(),
-                                      errorWidget: (context, url, error) => Icon(Icons.error),
                                     );
                                   },
                                 ),
@@ -430,7 +442,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           Row(
                             children: [
                               IconButton(
-                                onPressed: (){},
+                                onPressed: () async {
+                                  await player.seekToNext();
+                                  print("next");
+                                },
                                 icon: Icon(Icons.skip_previous, color: myColors.darkGreen,),
                               ),
                               IconButton(
@@ -449,16 +464,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               IconButton(
                                 onPressed: () async {
-                                  // setState(() {
-                                  //   currantStatePlay = !currantStatePlay;
-                                  // });
-                                  if(player.hasNext){
-                                    await player.seekToNext();
-                                    print("skip");
-                                  }
-                                  else{
-                                    print("Not skip");
-                                  }
+                                  await player.seekToPrevious();
                                 },
                                 icon: Icon(Icons.skip_next, color: myColors.darkGreen,),
                               ),
@@ -574,7 +580,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                           crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
                                             IconButton(
-                                              onPressed: (){},
+                                              onPressed: (){
+                                                if(player.hasPrevious){
+                                                  player.seekToPrevious();
+                                                  print("skip previous if condition");
+                                                }
+                                                print("skip previous");
+                                              },
                                               icon: Icon(Icons.skip_previous, color: myColors.darkGreen, size: 48, ),
                                             ),
                                             SizedBox(width: 30,),
@@ -594,14 +606,41 @@ class _HomeScreenState extends State<HomeScreen> {
                                             ),
                                             SizedBox(width: 30,),
                                             IconButton(
-                                              onPressed: () async {
-                                                await player.seekToNext();
+                                              // onPressed: () async {
+                                              //   await player.seekToNext();
+                                              // },
+                                              onPressed: (){
+                                                if(player.hasNext){
+                                                  player.seekToNext();
+                                                  print("skip previous if condition");
+                                                }
                                               },
                                               icon: Icon(Icons.skip_next, color: myColors.darkGreen, size: 48,),
                                             ),
                                           ],
                                         ),
-                                        // SizedBox(height: 20,),
+                                         SizedBox(height: 20,),
+                                        Row(
+                                          children: [
+                                            Text(_position.toString().split(".")[0]),
+                                            Expanded(
+                                              child: Slider(
+                                                value: _position.inSeconds.toDouble(),
+                                                max: _duration.inSeconds.toDouble(),
+                                                min: Duration(microseconds: 0).inSeconds.toDouble(),
+                                                activeColor: myColors.yellow,
+                                                inactiveColor: myColors.yellow.withOpacity(0.5),
+                                                onChanged: (value){
+                                                  setState(() {
+                                                    changeToSeconds(value.toInt());
+                                                    value = value;
+                                                  });
+                                                },
+                                              ),
+                                            ),
+                                            Text(_duration.toString().split(".")[0]),
+                                          ],
+                                        ),
                                         // IconButton(
                                         //   onPressed: () async {
                                         //     await player.shuffle();
@@ -626,5 +665,9 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
+  }
+  void changeToSeconds(int sec){
+    Duration duration = Duration(seconds: sec);
+    player.seek(duration);
   }
 }

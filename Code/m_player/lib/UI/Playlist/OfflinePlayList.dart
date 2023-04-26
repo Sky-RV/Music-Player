@@ -136,6 +136,9 @@ class _OfflinePlaylistState extends State<OfflinePlaylist> {
                     title: Text(item.data![index].playlist),
                     subtitle: Text("${item.data![index].numOfSongs}"),
                     onTap: () async {
+                      print("Details : ");
+                      print(item.data![index].id);
+                      print(item.data![index].data);
                       Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => PlaylistSongsOffline(playlistModel: item.data![index]))

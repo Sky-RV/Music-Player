@@ -47,15 +47,12 @@ dependencies:
   flutter_image_slideshow: ^0.1.4
   miniplayer: ^1.0.1
   just_audio: ^0.9.32
-  on_audio_query: ^2.8.0
+  on_audio_query: ^2.7.0
   path: ^1.8.2
   flutter_file_manager: ^0.2.0
   permission_handler: ^10.2.0
   just_audio_background: ^0.0.1-beta.9
   provider: ^6.0.5
-#  hive: ^2.2.3
-#  hive_flutter: ^1.1.0
-#  flutter_audio_query: ^0.3.5+6
 
 dev_dependencies:
   flutter_test:

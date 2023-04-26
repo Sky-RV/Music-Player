@@ -390,8 +390,9 @@ class _PlaylistSongsOfflineState extends State<PlaylistSongsOffline> {
         ],
       ),
       body: FutureBuilder<List<SongModel>>(
-        future: _audioQuery.queryWithFilters(
-            //{sortType: SongSortType.DATE_ADDED,}
+        future: OnAudioQuery.platform.querySongs(
+          sortType: SongSortType.DATE_ADDED,
+          path: "/storage/emulated/0/Music/Favorites", // playlist path
         ),
         builder: (context, item){
           if(item.data == null){
