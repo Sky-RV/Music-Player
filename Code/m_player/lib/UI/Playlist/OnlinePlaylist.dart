@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:m_player/Models/Playlist/Playlist_Model.dart';
 import 'package:m_player/Models/Playlist_Base/Playlist_Base_Model.dart';
 import 'package:m_player/Network/Rest_Client.dart';
+import 'package:m_player/UI/Playlist/Playlist_Songs_Online.dart';
 import 'package:m_player/Utils/MyColors.dart';
 
 class OnlinePlaylist extends StatefulWidget {
@@ -49,10 +50,10 @@ class _OnlinePlaylistState extends State<OnlinePlaylist> {
                   itemBuilder: (context, index){
                     return GestureDetector(
                       onTap: (){
-                        // Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(builder: (context) => MusicsCategoryScreen(category: snapshot.data!.musics![index],))
-                        // );
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => PlaylistSongsOnline(playlist: snapshot.data!.playlists![index]))
+                        );
                       },
                       child: CachedNetworkImage(
                         width: 164,

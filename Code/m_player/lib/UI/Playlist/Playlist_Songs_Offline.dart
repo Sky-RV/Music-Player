@@ -35,6 +35,8 @@ class _PlaylistSongsOfflineState extends State<PlaylistSongsOffline> {
   Duration _duration = const Duration();
   Duration _position = const Duration();
 
+  late ConcatenatingAudioSource _playlist;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -45,6 +47,7 @@ class _PlaylistSongsOfflineState extends State<PlaylistSongsOffline> {
         _updateCurrentPlayingSongDetails(index);
       }
     });
+    _setInitialPlaylist();
   }
 
   @override
@@ -52,6 +55,19 @@ class _PlaylistSongsOfflineState extends State<PlaylistSongsOffline> {
     // TODO: implement dispose
     _player.dispose();
     super.dispose();
+  }
+
+  void _setInitialPlaylist() async {
+    const prefix = 'https://www.soundhelix.com/examples/mp3';
+    final song1 = Uri.parse('$prefix/SoundHelix-Song-1.mp3');
+    final song2 = Uri.parse('$prefix/SoundHelix-Song-2.mp3');
+    final song3 = Uri.parse('$prefix/SoundHelix-Song-3.mp3');
+    _playlist = ConcatenatingAudioSource(children: [
+      AudioSource.uri(song1, tag: 'Song 1'),
+      AudioSource.uri(song2, tag: 'Song 2'),
+      AudioSource.uri(song3, tag: 'Song 3'),
+    ]);
+    await _player.setAudioSource(_playlist);
   }
 
   void requestStoragePermission() async {
