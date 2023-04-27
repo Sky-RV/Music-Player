@@ -4,25 +4,22 @@ import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:m_player/Models/Music/Music_Model.dart';
-import 'package:m_player/Provider/Song_Model_Provider.dart';
-// import 'package:m_player/Provider/Song_Model_Provider.dart';
-import 'package:m_player/Utils/MyColors.dart';
 import 'package:on_audio_query/on_audio_query.dart';
-import 'package:provider/provider.dart';
-// import 'package:provider/provider.dart';
+import 'package:m_player/Utils/MyColors.dart';
 
+class PlayAlbumMusics extends StatefulWidget {
 
-class PlayNow extends StatefulWidget {
-  const PlayNow({Key? key, required this.songModel, required this.audioPlayer}) : super(key: key);
-
-  final SongModel songModel;
+  final Music_Model music_model;
   final AudioPlayer audioPlayer;
+  final List<Music_Model> list;
+
+  const PlayAlbumMusics({Key? key, required this.music_model, required this.audioPlayer, required this.list}) : super(key: key);
 
   @override
-  State<PlayNow> createState() => _PlayNowState();
+  State<PlayAlbumMusics> createState() => _PlayAlbumMusicsState();
 }
 
-class _PlayNowState extends State<PlayNow> {
+class _PlayAlbumMusicsState extends State<PlayAlbumMusics> {
 
   bool _isPlaying = false;
   Duration _duration = const Duration();
@@ -41,16 +38,18 @@ class _PlayNowState extends State<PlayNow> {
   void playSong(){
     try {
       widget.audioPlayer.setAudioSource(
-          AudioSource.uri(
-              Uri.parse(widget.songModel.uri!),
-            tag: MediaItem(
-              id: '${widget.songModel.id}',
-              album: '${widget.songModel.album}',
-              title: '${widget.songModel.displayNameWOExt}',
-              artUri: Uri.parse('https://example.com/albumart.jpg'),
-            ),
+        AudioSource.uri(
+          Uri.parse(widget.music_model.mp3_url!),
+          tag: MediaItem(
+            id: '${widget.music_model.id}',
+            displayDescription: '${widget.music_model.mp3_description}',
+            album: '${widget.music_model.category_name}',
+            title: '${widget.music_model.mp3_title}',
+            artUri: Uri.parse('https://example.com/albumart.jpg'),
           ),
+        ),
       );
+      widget.audioPlayer.setAudioSource(createPlaylist(widget.list));
       widget.audioPlayer.play();
       _isPlaying = true;
       _isShuffel = false;
@@ -71,6 +70,14 @@ class _PlayNowState extends State<PlayNow> {
     });
   }
 
+  ConcatenatingAudioSource createPlaylist(List<Music_Model> songs){
+    List<AudioSource> sources = [];
+    for (var song in songs){
+      sources.add(AudioSource.uri(Uri.parse(song.mp3_url!)));
+    }
+    return ConcatenatingAudioSource(children: sources);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,17 +95,17 @@ class _PlayNowState extends State<PlayNow> {
                     Center(
                       // child: const ArtWorkWidget(),
                       child: QueryArtworkWidget(
-                          id: widget.songModel.id,
-                          type: ArtworkType.AUDIO,
-                          artworkHeight: 200.0,
-                          artworkWidth: 200.0,
-                          artworkFit: BoxFit.cover,
-                          nullArtworkWidget: Icon(Icons.music_note, color: myColors.darkGreen, size: 200,),
-                        ),
+                        id: int.parse(widget.music_model.id.toString()),
+                        type: ArtworkType.AUDIO,
+                        artworkHeight: 200.0,
+                        artworkWidth: 200.0,
+                        artworkFit: BoxFit.cover,
+                        nullArtworkWidget: Icon(Icons.music_note, color: myColors.darkGreen, size: 200,),
+                      ),
                     ),
                     SizedBox(height: 30,),
                     Text(
-                      widget.songModel.displayNameWOExt,
+                      widget.music_model.mp3_title.toString(),
                       // overflow: TextOverflow.fade,
                       maxLines: 1,
                       textAlign: TextAlign.center,
@@ -110,7 +117,7 @@ class _PlayNowState extends State<PlayNow> {
                     SizedBox(height: 30,),
 
                     Text(
-                      widget.songModel.artist.toString() == "<unknown>" ? "Unknown Artist" : widget.songModel.artist.toString(),
+                      widget.music_model.mp3_artist.toString() == "<unknown>" ? "Unknown Artist" : widget.music_model.mp3_artist.toString(),
                       // overflow: TextOverflow.fade,
                       maxLines: 1,
                       textAlign: TextAlign.center,
@@ -157,8 +164,8 @@ class _PlayNowState extends State<PlayNow> {
                             child: Container(
                               padding: EdgeInsets.all(10),
                               child: Icon(
-                                  Icons.skip_previous,
-                                  color: myColors.darkGreen,
+                                Icons.skip_previous,
+                                color: myColors.darkGreen,
                                 size: 40,
                               ),
                             ),
@@ -199,16 +206,17 @@ class _PlayNowState extends State<PlayNow> {
                               } catch (e) {
                                 print("Error seeking to next song: $e");
                               }
-                              print(widget.audioPlayer.playerState);
                               print(widget.audioPlayer.hasNext);
                               print(widget.audioPlayer.hasPrevious);
                               print(widget.audioPlayer.currentIndex);
-                              print(widget.audioPlayer.audioSource.toString());
+                              print(widget.list);
                             });
                           },
                         ),
                       ],
                     ),
+
+                    SizedBox(height: 30,),
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -219,7 +227,7 @@ class _PlayNowState extends State<PlayNow> {
                             onTap: (){
                               //_changePlayerViewVisibility();
                               Navigator.pop(context);
-                              },
+                            },
                             child: Container(
                               padding: EdgeInsets.all(10),
                               child: Icon(Icons.list_rounded, color: myColors.darkGreen,),
@@ -285,5 +293,4 @@ class _PlayNowState extends State<PlayNow> {
     Duration duration = Duration(seconds: sec);
     widget.audioPlayer.seek(duration);
   }
-
 }

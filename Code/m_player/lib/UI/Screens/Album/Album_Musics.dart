@@ -9,6 +9,8 @@ import 'package:m_player/Models/Album_Base/Album_Base_Model.dart';
 import 'package:m_player/Models/Latest_Music/Latest_Music_Model.dart';
 import 'package:m_player/Models/Music/Music_Model.dart';
 import 'package:m_player/Network/Rest_Client.dart';
+import 'package:m_player/UI/Device/PlayNow.dart';
+import 'package:m_player/UI/Screens/Album/PlayAlbumMusics.dart';
 import 'package:m_player/Utils/MyColors.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -133,9 +135,24 @@ class _Album_MusicsState extends State<Album_Musics_Screen> {
                         width: 64,
                         height: 64,
                         imageUrl: "${snapshot.data!.musics![index].mp3_thumbnail_b}",
+                        imageBuilder: (context, imageProvider) => Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.cover
+                            )
+                          ),
+                        ),
                       ),
                       title: Text(snapshot.data!.musics![index].mp3_title.toString()),
                       subtitle: Text(snapshot.data!.musics![index].mp3_artist.toString()),
+                      onTap: (){
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => PlayAlbumMusics(music_model: snapshot.data!.musics![index], audioPlayer: _audioPlayer, list: snapshot.data!.musics!,))
+                        );
+                      },
                     );
                   },
                 ),
