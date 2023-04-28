@@ -1,9 +1,12 @@
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
+import 'package:m_player/Models/Latest_Music/Latest_Music_Model.dart';
 import 'package:m_player/Models/Music/Music_Model.dart';
+import 'package:miniplayer/miniplayer.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:m_player/Utils/MyColors.dart';
 
@@ -11,9 +14,15 @@ class PlayAlbumMusics extends StatefulWidget {
 
   final Music_Model music_model;
   final AudioPlayer audioPlayer;
+  //final Future<Latest_Music_Model> FutureList;
   final List<Music_Model> list;
 
-  const PlayAlbumMusics({Key? key, required this.music_model, required this.audioPlayer, required this.list}) : super(key: key);
+  const PlayAlbumMusics({Key? key,
+    required this.music_model,
+    required this.audioPlayer,
+    required this.list,
+   // required this.FutureList
+  }) : super(key: key);
 
   @override
   State<PlayAlbumMusics> createState() => _PlayAlbumMusicsState();
@@ -27,6 +36,7 @@ class _PlayAlbumMusicsState extends State<PlayAlbumMusics> {
 
   bool _isShuffel = false;
   bool _isRepeat = false;
+  bool currantStatePlay = false;
 
   @override
   void initState() {
@@ -68,6 +78,10 @@ class _PlayAlbumMusicsState extends State<PlayAlbumMusics> {
         _position = p!;
       });
     });
+  }
+
+  loadMusic() async{
+    await widget.audioPlayer.setUrl(widget.music_model.mp3_url!);
   }
 
   ConcatenatingAudioSource createPlaylist(List<Music_Model> songs){
