@@ -8,6 +8,7 @@ import 'package:m_player/Models/Latest_Music/Latest_Music_Model.dart';
 import 'package:m_player/Models/Music/Music_Model.dart';
 import 'package:m_player/Models/Playlist/Playlist_Model.dart';
 import 'package:m_player/Network/Rest_Client.dart';
+import 'package:m_player/UI/Playlist/Online/PlayMusics_Online.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:m_player/Utils/MyColors.dart';
@@ -30,10 +31,11 @@ class _PlaylistSongsOnlineState extends State<PlaylistSongsOnline> {
   final OnAudioQuery _audioQuery = OnAudioQuery();
   final AudioPlayer _audioPlayer = AudioPlayer();
 
-  List<Music_Model> songs = [];
   String currentTitle = '';
   int currentIndex = 0;
   bool isPlaying = false;
+
+  List<Music_Model> myMusicListPass = [];
 
   @override
   void initState() {
@@ -87,8 +89,8 @@ class _PlaylistSongsOnlineState extends State<PlaylistSongsOnline> {
 
   void _updateCurrentPlaySongDetails(int index){
     setState(() {
-      if(songs.isNotEmpty){
-        currentTitle = songs[index].mp3_title.toString();
+      if(myMusicListPass.isNotEmpty){
+        currentTitle = myMusicListPass[index].mp3_title.toString();
         currentIndex = index;
       }
     });
@@ -135,6 +137,31 @@ class _PlaylistSongsOnlineState extends State<PlaylistSongsOnline> {
                       ),
                       title: Text(snapshot.data!.musics![index].mp3_title.toString()),
                       subtitle: Text(snapshot.data!.musics![index].mp3_artist.toString()),
+                      onTap: (){
+                        for(int i=0; i<snapshot.data!.musics!.length; i++){
+                          myMusicListPass.add(snapshot.data!.musics![i]);
+                        }
+                        print("My list : ");
+                        for(int i=0; i<snapshot.data!.musics!.length; i++){
+                          print(myMusicListPass[i].mp3_title);
+                        }
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) =>
+                                PlayMusics_Online(
+                                  // category: widget.category,
+                                  audioPlayer: _audioPlayer,
+                                  list: myMusicListPass,
+                                  music_model: snapshot.data!.musics![index],
+                                )
+                            )
+                        );
+                        print(snapshot.data!.musics![index]);
+                        print(index);
+                        print(snapshot.data!.musics);
+                        print(snapshot.data!);
+                        print(myMusicListPass);
+                      },
                     );
                   },
                 ),

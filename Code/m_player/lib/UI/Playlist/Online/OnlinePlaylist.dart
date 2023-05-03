@@ -52,7 +52,10 @@ class _OnlinePlaylistState extends State<OnlinePlaylist> {
                       onTap: (){
                         Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => PlaylistSongsOnline(playlist: snapshot.data!.playlists![index]))
+                            MaterialPageRoute(builder: (context) =>
+                                PlaylistSongsOnline(
+                                    playlist: snapshot.data!.playlists![index])
+                            )
                         );
                       },
                       child: CachedNetworkImage(
