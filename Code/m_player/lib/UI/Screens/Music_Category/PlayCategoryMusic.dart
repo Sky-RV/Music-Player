@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -11,25 +10,23 @@ import 'package:miniplayer/miniplayer.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:m_player/Utils/MyColors.dart';
 
-class PlayAlbumMusics extends StatefulWidget {
+class PlayCategoryMusic extends StatefulWidget {
 
   final Music_Model music_model;
   final AudioPlayer audioPlayer;
-  //final Future<Latest_Music_Model> FutureList;
   final List<Music_Model> list;
 
-  const PlayAlbumMusics({Key? key,
+  const PlayCategoryMusic({Key? key,
     required this.music_model,
     required this.audioPlayer,
     required this.list,
-   // required this.FutureList
   }) : super(key: key);
 
   @override
-  State<PlayAlbumMusics> createState() => _PlayAlbumMusicsState();
+  State<PlayCategoryMusic> createState() => _PlayCategoryMusicState();
 }
 
-class _PlayAlbumMusicsState extends State<PlayAlbumMusics> {
+class _PlayCategoryMusicState extends State<PlayCategoryMusic> {
 
   bool _isPlaying = false;
   Duration _duration = const Duration();
@@ -60,7 +57,7 @@ class _PlayAlbumMusicsState extends State<PlayAlbumMusics> {
           ),
         ),
       );
-      widget.audioPlayer.setAudioSource(createPlaylist(widget.list));
+     // widget.audioPlayer.setAudioSource(createPlaylist(widget.list));
       widget.audioPlayer.play();
       _isPlaying = true;
       _isShuffel = false;

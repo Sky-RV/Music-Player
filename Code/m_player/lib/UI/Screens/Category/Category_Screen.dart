@@ -1,10 +1,18 @@
+import 'dart:developer';
+
+import 'package:audio_service/audio_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:m_player/Models/Category_Base/Category_Base_Model.dart';
+import 'package:m_player/Models/Music/Music_Model.dart';
 import 'package:m_player/Network/Rest_Client.dart';
+import 'package:m_player/UI/Screens/Device/Device_Screen_New.dart';
 import 'package:m_player/Utils/MyColors.dart';
 import 'package:m_player/UI/Screens/Music_Category/Musics_Category_Screen.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 
 class CategoryScreen extends StatefulWidget {
   const CategoryScreen({Key? key}) : super(key: key);
@@ -19,7 +27,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
   late Rest_Client rest_client;
   late Future<Category_Base_Model> getCategories;
 
-
   @override
   void initState() {
     // TODO: implement initState
@@ -28,9 +35,11 @@ class _CategoryScreenState extends State<CategoryScreen> {
     getCategories = rest_client.getCategories();
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       backgroundColor: myColors.white,
 
       body: Container(
@@ -49,7 +58,11 @@ class _CategoryScreenState extends State<CategoryScreen> {
                       onTap: (){
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => MusicsCategoryScreen(category: snapshot.data!.category![index],))
+                          MaterialPageRoute(builder: (context) =>
+                              MusicsCategoryScreen(
+                                category: snapshot.data!.category![index],
+                              )
+                          )
                         );
                       },
                       child: CachedNetworkImage(

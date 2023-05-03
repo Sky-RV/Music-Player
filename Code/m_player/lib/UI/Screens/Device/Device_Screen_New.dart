@@ -143,7 +143,7 @@ class _Device_Screen_NewState extends State<Device_Screen_New>{
     }
     return ConcatenatingAudioSource(children: sources);
   }
-  
+
   void toast(BuildContext context, String text){
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -153,7 +153,7 @@ class _Device_Screen_NewState extends State<Device_Screen_New>{
       )
     );
   }
-  
+
   void _updateCurrentPlayingSongDetails(int index){
     setState(() {
       if(songs.isNotEmpty){
