@@ -35,12 +35,47 @@ class _PlayCategoryMusicState extends State<PlayCategoryMusic> {
   bool _isShuffel = false;
   bool _isRepeat = false;
   bool currantStatePlay = false;
+  int currentIndex = 0;
+  String currentSongTitle = '';
+
+  List<Music_Model> mylist = [];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     playSong();
+    widget.audioPlayer.currentIndexStream.listen((index) {
+      if(index != null){
+        _updateCurrentPlayingSongDetails(index);
+        print("update bla nla vla");
+        for(var item in mylist){
+          print(item);
+        }
+        print(mylist[currentIndex].id);
+      }
+    });
+  }
+
+  void _updateCurrentPlayingSongDetails(int index){
+   setState(() {
+     if(mylist.isNotEmpty){
+        currentSongTitle = mylist[index].mp3_title!;
+        currentIndex = index;
+        print("in the update func.");
+     }
+   });
+  }
+
+  loadMusic() async{
+    await widget.audioPlayer.setUrl(widget.music_model.mp3_url!);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    widget.audioPlayer.dispose();
+    super.dispose();
   }
 
   void playSong(){
@@ -76,10 +111,6 @@ class _PlayCategoryMusicState extends State<PlayCategoryMusic> {
         _position = p!;
       });
     });
-  }
-
-  loadMusic() async{
-    await widget.audioPlayer.setUrl(widget.music_model.mp3_url!);
   }
 
   ConcatenatingAudioSource createPlaylist(List<Music_Model> songs){
@@ -118,6 +149,7 @@ class _PlayCategoryMusicState extends State<PlayCategoryMusic> {
                     SizedBox(height: 30,),
                     Text(
                       widget.music_model.mp3_title.toString(),
+                      // mylist[currentIndex].mp3_title.toString(),
                       // overflow: TextOverflow.fade,
                       maxLines: 1,
                       textAlign: TextAlign.center,
@@ -221,7 +253,6 @@ class _PlayCategoryMusicState extends State<PlayCategoryMusic> {
                               print(widget.audioPlayer.hasNext);
                               print(widget.audioPlayer.hasPrevious);
                               print(widget.audioPlayer.currentIndex);
-                              print(widget.list);
                             });
                           },
                         ),

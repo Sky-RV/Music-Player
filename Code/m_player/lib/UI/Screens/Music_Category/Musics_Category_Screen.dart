@@ -120,6 +120,10 @@ class _MusicsCategoryScreenState extends State<MusicsCategoryScreen> {
                         for(int i=0; i<snapshot.data!.musics!.length; i++){
                           myMusicListPass.add(snapshot.data!.musics![i]);
                         }
+                        print("My list : ");
+                        for(int i=0; i<snapshot.data!.musics!.length; i++){
+                          print(myMusicListPass[i].mp3_title);
+                        }
                         Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) =>
@@ -135,7 +139,7 @@ class _MusicsCategoryScreenState extends State<MusicsCategoryScreen> {
                         print(index);
                         print(snapshot.data!.musics);
                         print(snapshot.data!);
-                        print(musics);
+                        print(myMusicListPass);
                       },
                       child: CachedNetworkImage(
                         width: 164,
