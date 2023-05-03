@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:m_player/Models/Playlist/Playlist_Model.dart';
 import 'package:m_player/Models/Playlist_Base/Playlist_Base_Model.dart';
 import 'package:m_player/Network/Rest_Client.dart';
-import 'package:m_player/UI/Playlist/Playlist_Songs_Online.dart';
+import 'package:m_player/UI/Playlist/Online/Playlist_Songs_Online.dart';
 import 'package:m_player/Utils/MyColors.dart';
 
 class OnlinePlaylist extends StatefulWidget {

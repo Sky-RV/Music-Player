@@ -5,7 +5,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:m_player/Models/Music/Music_Model.dart';
-import 'package:m_player/UI/Playlist/Playlist_Songs_Offline.dart';
+import 'package:m_player/UI/Playlist/Offline/Playlist_Songs_Offline.dart';
 import 'package:m_player/Utils/MyColors.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 

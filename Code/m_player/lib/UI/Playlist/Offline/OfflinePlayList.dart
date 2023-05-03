@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:m_player/UI/Playlist/Playlist_Songs_Offline.dart';
+import 'package:m_player/UI/Playlist/Offline/Playlist_Songs_Offline.dart';
 import 'package:m_player/Utils/MyColors.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
