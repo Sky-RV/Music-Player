@@ -52,7 +52,6 @@ class _PlayCategoryMusicState extends State<PlayCategoryMusic> {
         for(var item in mylist){
           print(item);
         }
-        print(mylist[currentIndex].id);
       }
     });
   }
@@ -92,7 +91,7 @@ class _PlayCategoryMusicState extends State<PlayCategoryMusic> {
           ),
         ),
       );
-     // widget.audioPlayer.setAudioSource(createPlaylist(widget.list));
+      widget.audioPlayer.setAudioSource(createPlaylist(widget.list));
       widget.audioPlayer.play();
       _isPlaying = true;
       _isShuffel = false;
