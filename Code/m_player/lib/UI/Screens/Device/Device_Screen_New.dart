@@ -649,7 +649,7 @@ class _Device_Screen_NewState extends State<Device_Screen_New>{
                   ),
                   title: Text(item.data![index].title),
                   subtitle: Text("${item.data![index].artist}"),
-                  trailing: const Icon(Icons.more_vert),
+                 // trailing: const Icon(Icons.more_vert),
                   onTap: () async {
                     _changePlayerViewVisibility();
                     // String? uri = item.data![index].uri;
