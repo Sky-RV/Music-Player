@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
+//import 'package:flutter_file_manager/flutter_file_manager.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:just_audio_background/just_audio_background.dart';
@@ -91,6 +92,7 @@ class _Device_Screen_NewState extends State<Device_Screen_New>{
   int currentIndex = 0;
   bool isPlayerViewVisible = false;
   bool _isShuffel = false;
+ // late var files;
 
   Duration _duration = const Duration();
   Duration _position = const Duration();
@@ -105,6 +107,7 @@ class _Device_Screen_NewState extends State<Device_Screen_New>{
         _updateCurrentPlayingSongDetails(index);
       }
     });
+    //getFiles();
   }
 
   @override
@@ -113,6 +116,17 @@ class _Device_Screen_NewState extends State<Device_Screen_New>{
     _player.dispose();
     super.dispose();
   }
+
+  // void getFiles() async { //asyn function to get list of files
+  //   List<StorageInfo> storageInfo = await PathProviderEx.getStorageInfo();
+  //   var root = storageInfo[0].rootDir; //storageInfo[1] for SD card, geting the root directory
+  //   var fm = FileManager(root: Directory(root)); //
+  //   files = await fm.filesTree(
+  //       excludedPaths: ["/storage/emulated/0/Android"],
+  //       extensions: ["mp3"] //optional, to filter files, list only mp3 files
+  //   );
+  //   setState(() {}); //update the UI
+  // }
 
   void requestStoragePermission() async {
     // Permission.storage.request();
@@ -543,56 +557,6 @@ class _Device_Screen_NewState extends State<Device_Screen_New>{
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
         actions: [
           IconButton(
-            // onPressed: (){
-            //   // Column(
-            //   //   children: [
-            //   //     Expanded(
-            //   //       child: FutureBuilder<List<SongModel>>(
-            //   //         future: _audioQuery.querySongs(
-            //   //           sortType: null,
-            //   //             orderType: OrderType.ASC_OR_SMALLER,
-            //   //             uriType: UriType.EXTERNAL,
-            //   //             ignoreCase: true
-            //   //         ),
-            //   //         builder: (context, item){
-            //   //           if(item.data == null){
-            //   //             return const Center(child: CircularProgressIndicator(),);
-            //   //           }
-            //   //           if(item.data!.isEmpty){
-            //   //             return const Center(child: Text("No Music Found"),);
-            //   //           }
-            //   //           songs.clear();
-            //   //           songs = item.data!;
-            //   //           return ListView.builder(
-            //   //             itemCount: item.data!.length,
-            //   //             itemBuilder: (context, index){
-            //   //               return ListTile(
-            //   //                 leading: QueryArtworkWidget(
-            //   //                   id: item.data![index].id,
-            //   //                   type: ArtworkType.AUDIO,
-            //   //                   nullArtworkWidget: Icon(Icons.music_note),
-            //   //                 ),
-            //   //                 title: Text(item.data![index].title),
-            //   //                 subtitle: Text("${item.data![index].artist}"),
-            //   //                 onTap: () async {
-            //   //                   _changePlayerViewVisibility();
-            //   //                   // String? uri = item.data![index].uri;
-            //   //                   // await _player.setAudioSource(
-            //   //                   //   AudioSource.uri(Uri.parse(uri!))
-            //   //                   // );
-            //   //                   await _player.setAudioSource(createPlaylist(item.data!), initialIndex: index);
-            //   //                   await _player.play();
-            //   //                   toast(context, item.data![index].title.toString());
-            //   //                 },
-            //   //               );
-            //   //             },
-            //   //           );
-            //   //         },
-            //   //       ),
-            //   //     )
-            //   //   ],
-            //   // );
-            // },
             onPressed: (){
               showSearch(
                   context: context,

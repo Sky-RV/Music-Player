@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:audio_service/audio_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -49,6 +50,7 @@ class _PlaylistSongsOnlineState extends State<PlaylistSongsOnline> {
         _updateCurrentPlaySongDetails(index);
       }
     });
+    AudioServiceBackground.setState(playing: true);
   }
 
   @override
