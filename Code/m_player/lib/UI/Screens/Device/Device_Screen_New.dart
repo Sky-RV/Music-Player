@@ -9,6 +9,7 @@ import 'package:m_player/Models/Music/Music_Model.dart';
 import 'package:m_player/UI/Playlist/Offline/Playlist_Songs_Offline.dart';
 import 'package:m_player/Utils/MyColors.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+// import 'package:flutter_audio_query/flutter_audio_query.dart';
 
 class Device_Screen_New extends StatefulWidget {
   const Device_Screen_New({Key? key}) : super(key: key);
@@ -97,6 +98,9 @@ class _Device_Screen_NewState extends State<Device_Screen_New>{
   Duration _duration = const Duration();
   Duration _position = const Duration();
 
+  // final FlutterAudioQuery searchAudioQuery = FlutterAudioQuery();
+  // List<SongInfo> searchSongs = [];
+
   @override
   void initState() {
     // TODO: implement initState
@@ -107,7 +111,7 @@ class _Device_Screen_NewState extends State<Device_Screen_New>{
         _updateCurrentPlayingSongDetails(index);
       }
     });
-    //getFiles();
+//    mySearchSongs("");
   }
 
   @override
@@ -117,15 +121,41 @@ class _Device_Screen_NewState extends State<Device_Screen_New>{
     super.dispose();
   }
 
-  // void getFiles() async { //asyn function to get list of files
-  //   List<StorageInfo> storageInfo = await PathProviderEx.getStorageInfo();
-  //   var root = storageInfo[0].rootDir; //storageInfo[1] for SD card, geting the root directory
-  //   var fm = FileManager(root: Directory(root)); //
-  //   files = await fm.filesTree(
-  //       excludedPaths: ["/storage/emulated/0/Android"],
-  //       extensions: ["mp3"] //optional, to filter files, list only mp3 files
+  // Widget searchWidget(){
+  //   return Scaffold(
+  //     appBar: AppBar(
+  //       title: TextField(
+  //         onChanged: (value) => mySearchSongs(value),
+  //         decoration: InputDecoration(
+  //           hintText: "جستجو در آهنگ‌ها، هنرمندان، و آلبوم‌ها",
+  //           hintStyle: TextStyle(color: Colors.white),
+  //         ),
+  //         style: TextStyle(color: Colors.white),
+  //       ),
+  //     ),
+  //     body: ListView.builder(
+  //       itemCount: songs.length,
+  //       itemBuilder: (context, index) => ListTile(
+  //         title: Text(songs[index].title),
+  //         subtitle: Text("${songs[index].artist} - ${songs[index].album}"),
+  //       ),
+  //     ),
   //   );
-  //   setState(() {}); //update the UI
+  // }
+
+  // void mySearchSongs(String query) async {
+  //   List<SongInfo> allSongs = await searchAudioQuery.getSongs();
+  //
+  //   setState(() {
+  //     if (query.isEmpty) {
+  //       songs = allSongs.cast<SongModel>();
+  //     } else {
+  //       songs = allSongs.where((song) =>
+  //       song.title.toLowerCase().contains(query.toLowerCase()) ||
+  //           song.artist.toLowerCase().contains(query.toLowerCase()) ||
+  //           song.album.toLowerCase().contains(query.toLowerCase())).cast<SongModel>().toList();
+  //     }
+  //   });
   // }
 
   void requestStoragePermission() async {
@@ -558,10 +588,7 @@ class _Device_Screen_NewState extends State<Device_Screen_New>{
         actions: [
           IconButton(
             onPressed: (){
-              showSearch(
-                  context: context,
-                  delegate: CustomSearch()
-              );
+              //searchWidget();
             },
             icon: Icon(Icons.search, color: myColors.darkGreen,),
           )
@@ -728,80 +755,84 @@ class DurationState {
   DurationState({this.position = Duration.zero, this.total = Duration.zero, this.buffered = Duration.zero});
 }
 
-class CustomSearch extends SearchDelegate{
-
-  final OnAudioQuery _audioQuery = OnAudioQuery();
-  final AudioPlayer _player = AudioPlayer();
-  late final SongModel songModel;
-
-  querySongs() async {
-    // DEFAULT:
-    // SongSortType.TITLE,
-    // OrderType.ASC_OR_SMALLER,
-    // UriType.EXTERNAL,
-    List<SongModel> allData = await OnAudioQuery().querySongs(sortType: SongSortType.TITLE);
-  }
-
-  List<String> allData = ['rfer', 'referf'];
-
-  @override
-  List<Widget>? buildActions(BuildContext context) {
-    return [
-      IconButton(
-        icon: Icon(Icons.clear),
-        onPressed: (){
-          query = '';
-        },
-      )
-    ];
-  }
-
-  @override
-  Widget? buildLeading(BuildContext context) {
-    return IconButton(
-      icon: Icon(Icons.arrow_back_ios_new),
-      onPressed: (){
-        close(context, null);
-      },
-    );
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    List<String> matchQuery = [];
-    for(var item in allData){
-      if(item.toLowerCase().contains(query.toLowerCase())){
-        matchQuery.add(item);
-      }
-    }
-    return ListView.builder(
-      itemCount: matchQuery.length,
-      itemBuilder: (context, index){
-        var result = matchQuery[index];
-        return ListTile(
-          title: Text(result),
-        );
-      },
-    );
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    List<String> matchQuery = [];
-    for(var item in allData){
-      if(item.toLowerCase().contains(query.toLowerCase())){
-        matchQuery.add(item);
-      }
-    }
-    return ListView.builder(
-      itemCount: matchQuery.length,
-      itemBuilder: (context, index){
-        var result = matchQuery[index];
-        return ListTile(
-          title: Text(result),
-        );
-      },
-    );
-  }
-
-}
+// class CustomSearch extends SearchDelegate{
+//
+//   //final OnAudioQuery _audioQuery = OnAudioQuery();
+//   final AudioPlayer _player = AudioPlayer();
+//   late final SongModel songModel;
+//
+//   // final FlutterAudioQuery audioQuery = FlutterAudioQuery();
+//   //
+//   // List<SongInfo> songs = await audioQuery.getSongs();
+//
+//   // querySongs() async {
+//   //   // DEFAULT:
+//   //   // SongSortType.TITLE,
+//   //   // OrderType.ASC_OR_SMALLER,
+//   //   // UriType.EXTERNAL,
+//   //   List<SongModel> allData = await OnAudioQuery().querySongs(sortType: SongSortType.TITLE);
+//   // }
+//
+//   List<String> allData = ['rfer', 'referf'];
+//
+//   @override
+//   List<Widget>? buildActions(BuildContext context) {
+//     return [
+//       IconButton(
+//         icon: Icon(Icons.clear),
+//         onPressed: (){
+//           query = '';
+//         },
+//       )
+//     ];
+//   }
+//
+//   @override
+//   Widget? buildLeading(BuildContext context) {
+//     return IconButton(
+//       icon: Icon(Icons.arrow_back_ios_new),
+//       onPressed: (){
+//         close(context, null);
+//       },
+//     );
+//   }
+//
+//   @override
+//   Widget buildSuggestions(BuildContext context) {
+//     List<String> matchQuery = [];
+//     for(var item in allData){
+//       if(item.toLowerCase().contains(query.toLowerCase())){
+//         matchQuery.add(item);
+//       }
+//     }
+//     return ListView.builder(
+//       itemCount: matchQuery.length,
+//       itemBuilder: (context, index){
+//         var result = matchQuery[index];
+//         return ListTile(
+//           title: Text(result),
+//         );
+//       },
+//     );
+//   }
+//
+//   @override
+//   Widget buildResults(BuildContext context) {
+//     List<String> matchQuery = [];
+//     for(var item in allData){
+//       if(item.toLowerCase().contains(query.toLowerCase())){
+//         matchQuery.add(item);
+//       }
+//     }
+//     return ListView.builder(
+//       itemCount: matchQuery.length,
+//       itemBuilder: (context, index){
+//         var result = matchQuery[index];
+//         return ListTile(
+//           title: Text(result),
+//         );
+//       },
+//     );
+//   }
+//
+// }
