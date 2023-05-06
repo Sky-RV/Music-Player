@@ -39,11 +39,20 @@ class _PlayAlbumMusicsState extends State<PlayAlbumMusics> {
   bool _isRepeat = false;
   bool currantStatePlay = false;
 
+  List<Music_Model> songs = [];
+  String currentTitle = '';
+  int currentIndex = 0;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     playSong();
+    widget.audioPlayer.currentIndexStream.listen((index) {
+      if(index != null){
+        _updateCurrentPlaySongDetails(index);
+      }
+    });
   }
 
   void playSong(){
@@ -78,6 +87,15 @@ class _PlayAlbumMusicsState extends State<PlayAlbumMusics> {
       setState(() {
         _position = p!;
       });
+    });
+  }
+
+  void _updateCurrentPlaySongDetails(int index){
+    setState(() {
+      if(songs.isNotEmpty){
+        currentTitle = songs[index].mp3_title!;
+        currentIndex = index;
+      }
     });
   }
 
@@ -172,6 +190,7 @@ class _PlayAlbumMusicsState extends State<PlayAlbumMusics> {
                             onTap: (){
                               if(widget.audioPlayer.hasPrevious){
                                 widget.audioPlayer.seekToPrevious();
+
                                 print("skip previous if condition");
                               }
                               print("skip previous");
@@ -252,7 +271,9 @@ class _PlayAlbumMusicsState extends State<PlayAlbumMusics> {
                         Flexible(
                           child: InkWell(
                             onTap: (){
-                              widget.audioPlayer.loopMode == LoopMode.one ? widget.audioPlayer.setLoopMode(LoopMode.all) : widget.audioPlayer.setLoopMode(LoopMode.one);
+                              widget.audioPlayer.loopMode == LoopMode.one ?
+                              widget.audioPlayer.setLoopMode(LoopMode.all) :
+                              widget.audioPlayer.setLoopMode(LoopMode.one);
                             },
                             child: Container(
                               padding: EdgeInsets.all(10),

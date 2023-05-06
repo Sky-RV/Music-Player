@@ -129,68 +129,74 @@ class _Album_MusicsState extends State<Album_Musics_Screen> {
 
       backgroundColor: myColors.white,
 
-      body: FutureBuilder<Latest_Music_Model>(
-        future: getMusics,
-        builder: (context, snapshot){
-          if(snapshot.hasData){
-            return Container(
-              child: ListView.builder(
-                itemCount: snapshot.data!.musics!.length,
-                itemBuilder: (context, index){
-                  return ListTile(
-                    leading: CachedNetworkImage(
-                      width: 64,
-                      height: 64,
-                      imageUrl: "${snapshot.data!.musics![index].mp3_thumbnail_b}",
-                      imageBuilder: (context, imageProvider) => Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            image: DecorationImage(
-                                image: imageProvider,
-                                fit: BoxFit.cover
-                            )
-                        ),
-                      ),
+      body: Stack(
+        children: [
+          Container(
+            child: FutureBuilder<Latest_Music_Model>(
+              future: getMusics,
+              builder: (context, snapshot){
+                if(snapshot.hasData){
+                  return Container(
+                    child: ListView.builder(
+                      itemCount: snapshot.data!.musics!.length,
+                      itemBuilder: (context, index){
+                        return ListTile(
+                          leading: CachedNetworkImage(
+                            width: 64,
+                            height: 64,
+                            imageUrl: "${snapshot.data!.musics![index].mp3_thumbnail_b}",
+                            imageBuilder: (context, imageProvider) => Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  image: DecorationImage(
+                                      image: imageProvider,
+                                      fit: BoxFit.cover
+                                  )
+                              ),
+                            ),
+                          ),
+                          title: Text(snapshot.data!.musics![index].mp3_title.toString()),
+                          subtitle: Text(snapshot.data!.musics![index].mp3_artist.toString()),
+                          onTap: (){
+                            setState(() {
+                              isPlaying = true;
+                              currantStatePlay = true;
+                              currentMusic = snapshot.data!.musics![index];
+                            });
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) =>
+                                    PlayAlbumMusics(
+                                      music_model: snapshot.data!.musics![index],
+                                      audioPlayer: _audioPlayer,
+                                      list: snapshot.data!.musics!,
+                                      //FutureList: getMusics,
+                                    ))
+                            );
+                            print("Future : ");
+                            print(rest_client.getMusicsByAlbum(widget.album.aid!));
+                            print("Album : ");
+                            print(index);
+                          },
+                        );
+                      },
                     ),
-                    title: Text(snapshot.data!.musics![index].mp3_title.toString()),
-                    subtitle: Text(snapshot.data!.musics![index].mp3_artist.toString()),
-                    onTap: (){
-                      setState(() {
-                        isPlaying = true;
-                        currantStatePlay = true;
-                        currentMusic = snapshot.data!.musics![index];
-                      });
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) =>
-                              PlayAlbumMusics(
-                            music_model: snapshot.data!.musics![index],
-                            audioPlayer: _audioPlayer,
-                            list: snapshot.data!.musics!,
-                            //FutureList: getMusics,
-                          ))
-                      );
-                      print("Future : ");
-                      print(rest_client.getMusicsByAlbum(widget.album.aid!));
-                      print("Album : ");
-                      print(index);
-                    },
                   );
-                },
-              ),
-            );
-          }
-          else if (snapshot.hasError){
-            return Center(
-              child: Text("Error accured. Please check your connection."),
-            );
-          }
-          else{
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
+                }
+                else if (snapshot.hasError){
+                  return Center(
+                    child: Text("Error accured. Please check your connection."),
+                  );
+                }
+                else{
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              },
+            ),
+          ),
+        ],
       ),
 
       // body: Container(

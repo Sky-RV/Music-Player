@@ -67,6 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Stack(
         children: [
 
+          // Home Screens
           Container(
             padding: EdgeInsets.only(bottom: 70),
             child: SingleChildScrollView(
@@ -128,6 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              // New Music Text
                               Container(
                                 margin: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                                 child: Text(
@@ -402,6 +404,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
 
+          // when Music is Playing
           if (isPlay == true)
             Container(
             margin: EdgeInsets.only(bottom: 70),
@@ -441,33 +444,33 @@ class _HomeScreenState extends State<HomeScreen> {
 
                           Row(
                             children: [
-                              IconButton(
-                                onPressed: () async {
-                                  await player.seekToNext();
-                                  print("next");
-                                },
-                                icon: Icon(Icons.skip_previous, color: myColors.darkGreen,),
-                              ),
+                              // IconButton(
+                              //   onPressed: () async {
+                              //     await player.seekToNext();
+                              //     print("next");
+                              //   },
+                              //   icon: Icon(Icons.skip_previous, color: myColors.darkGreen,),
+                              // ),
                               IconButton(
                                 onPressed: () async {
                                   setState(() {
                                     currantStatePlay = !currantStatePlay;
                                   });
-                                  if(currantStatePlay == false){
+                                  if(currantStatePlay == true){
                                     await player.play();
                                   }
                                   else{
                                     await player.pause();
                                   }
                                 },
-                                icon: Icon(currantStatePlay == false ? Icons.pause : Icons.play_arrow, color: myColors.darkGreen,),
+                                icon: Icon(currantStatePlay == true ? Icons.pause : Icons.play_arrow, color: myColors.darkGreen,),
                               ),
-                              IconButton(
-                                onPressed: () async {
-                                  await player.seekToPrevious();
-                                },
-                                icon: Icon(Icons.skip_next, color: myColors.darkGreen,),
-                              ),
+                              // IconButton(
+                              //   onPressed: () async {
+                              //     await player.seekToPrevious();
+                              //   },
+                              //   icon: Icon(Icons.skip_next, color: myColors.darkGreen,),
+                              // ),
                               SizedBox(width: 10,)
                             ],
                           )
