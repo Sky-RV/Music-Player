@@ -207,7 +207,7 @@ class _Rest_Client implements Rest_Client {
   @override
   Future<Latest_Music_Model> getMusicByArtists(name) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{'mp3_artist': name};
+    final queryParameters = <String, dynamic>{r'mp3_artist': name};
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio
