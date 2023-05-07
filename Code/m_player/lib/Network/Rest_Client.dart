@@ -37,4 +37,7 @@ abstract class Rest_Client{
   @GET('api.php')
   Future<Latest_Music_Model> getMusicByPlaylists(@Query("pid") String id);
 
+  @GET('api.php')
+  Future<Latest_Music_Model> getMusicByArtists(@Query("mp3_artist") String name);
+
 }

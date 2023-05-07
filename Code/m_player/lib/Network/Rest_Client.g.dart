@@ -204,6 +204,29 @@ class _Rest_Client implements Rest_Client {
     return value;
   }
 
+  @override
+  Future<Latest_Music_Model> getMusicByArtists(name) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{'mp3_artist': name};
+    final _headers = <String, dynamic>{};
+    final Map<String, dynamic>? _data = null;
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<Latest_Music_Model>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+      _dio.options,
+      'api.php',
+      queryParameters: queryParameters,
+      data: _data,
+    )
+        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = Latest_Music_Model.fromJson(_result.data!);
+    return value;
+  }
+
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||

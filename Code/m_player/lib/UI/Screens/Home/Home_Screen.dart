@@ -11,6 +11,7 @@ import 'package:m_player/Models/Music/Music_Model.dart';
 import 'package:m_player/Models/Playlist_Base/Playlist_Base_Model.dart';
 import 'package:m_player/Network/Rest_Client.dart';
 import 'package:m_player/UI/Screens/Album/Album_Musics.dart';
+import 'package:m_player/UI/Screens/Artist_Musics/Artist_Musics.dart';
 import 'package:m_player/Utils/MyColors.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:miniplayer/miniplayer.dart';
@@ -347,39 +348,53 @@ class _HomeScreenState extends State<HomeScreen> {
                                 scrollDirection: Axis.horizontal,
                                 itemCount: snapshot.data!.artist!.length,
                                 itemBuilder: (context, index){
-                                  return Column(
-                                    children: [
-                                      Container(
-                                        margin: EdgeInsets.all(8),
-                                        child: CircleAvatar(
-                                          radius: 60,
-                                          child: ClipOval(
-                                            child: CachedNetworkImage(
-                                              imageUrl: "${snapshot.data!.artist![index].artist_image}",
-                                              imageBuilder: (context, imageProvider) => Container(
-                                                margin: EdgeInsets.all(8),
-                                                decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius.circular(15.0),
-                                                  image: DecorationImage(
-                                                    image: imageProvider,
-                                                    fit: BoxFit.cover,
+                                  return GestureDetector(
+                                    onTap: (){
+                                      Navigator.push( //category: snapshot.data!.category![index],
+                                          context,
+                                          MaterialPageRoute(builder: (context) =>
+                                              Artists_Music(
+                                                  artist_model: snapshot.data!.artist![index],
+                                                artist_name: snapshot.data!.artist![index].artist_name!,
+                                              ),
+                                          )
+                                      );
+                                      print(snapshot.data!.artist![index].artist_name);
+                                    },
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                          margin: EdgeInsets.all(8),
+                                          child: CircleAvatar(
+                                            radius: 60,
+                                            child: ClipOval(
+                                              child: CachedNetworkImage(
+                                                imageUrl: "${snapshot.data!.artist![index].artist_image}",
+                                                imageBuilder: (context, imageProvider) => Container(
+                                                  margin: EdgeInsets.all(8),
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(15.0),
+                                                    image: DecorationImage(
+                                                      image: imageProvider,
+                                                      fit: BoxFit.cover,
+                                                    ),
                                                   ),
                                                 ),
+                                                placeholder: (context, url) => CircularProgressIndicator(),
+                                                errorWidget: (context, url, error) => Icon(Icons.error),
                                               ),
-                                              placeholder: (context, url) => CircularProgressIndicator(),
-                                              errorWidget: (context, url, error) => Icon(Icons.error),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                      Text(
-                                        "${snapshot.data!.artist![index].artist_name}",
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            color: myColors.darkGreen
-                                        ),
-                                      )
-                                    ],
+                                        Text(
+                                          "${snapshot.data!.artist![index].artist_name}",
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              color: myColors.darkGreen
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   );
                                 },
                               ),
