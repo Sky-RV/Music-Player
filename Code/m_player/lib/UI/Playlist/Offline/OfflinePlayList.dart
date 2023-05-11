@@ -141,7 +141,12 @@ class _OfflinePlaylistState extends State<OfflinePlaylist> {
                       print(item.data![index].data);
                       Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => PlaylistSongsOffline(playlistModel: item.data![index]))
+                          MaterialPageRoute(builder:
+                              (context) =>
+                                  PlaylistSongsOffline(
+                                    playlistModel: item.data![index],
+                                    playlistId: item.data![index].id,
+                                  ))
                       );
                     },
                   ),

@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:m_player/Models/Playlist/Playlist_Model.dart';
 import 'package:m_player/Models/Playlist_Base/Playlist_Base_Model.dart';
 import 'package:m_player/Network/Rest_Client.dart';
@@ -20,6 +21,7 @@ class _OnlinePlaylistState extends State<OnlinePlaylist> {
   final dio = Dio();
   late Rest_Client rest_client;
   late Future<Playlist_Base_Model> getPlaylists;
+  final AudioPlayer player = AudioPlayer();
 
   @override
   void initState() {
@@ -51,6 +53,7 @@ class _OnlinePlaylistState extends State<OnlinePlaylist> {
                   itemBuilder: (context, index){
                     return GestureDetector(
                       onTap: (){
+                        player.stop();
                         Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) =>

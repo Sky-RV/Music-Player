@@ -44,9 +44,7 @@ class _PlaylistsState extends State<Playlists>
               child: TabBar(
                 controller: _tabController,
                 indicator: BoxDecoration(
-                  borderRadius: BorderRadius.circular(
-                    25.0,
-                  ),
+                  borderRadius: BorderRadius.circular(25.0,),
                   color: myColors.yellow,
                 ),
                 labelColor: myColors.green,
@@ -54,11 +52,11 @@ class _PlaylistsState extends State<Playlists>
                 tabs: [
                   Tab(
                     text: 'Online Playlist',
-                  ),
+                  ), // Online
 
                   Tab(
                     text: 'Offline Playlist',
-                  ),
+                  ), // Offline
                 ],
               ),
             ),

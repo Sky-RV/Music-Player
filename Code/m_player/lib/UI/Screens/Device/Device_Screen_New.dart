@@ -7,9 +7,11 @@ import 'package:flutter/foundation.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:m_player/Models/Music/Music_Model.dart';
 import 'package:m_player/UI/Playlist/Offline/Playlist_Songs_Offline.dart';
+import 'package:m_player/UI/Screens/Device/PlaySearch.dart';
 import 'package:m_player/Utils/MyColors.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 // import 'package:flutter_audio_query/flutter_audio_query.dart';
+import 'package:m_player/UI/Screens/Device/Device_Screen_New.dart';
 
 class Device_Screen_New extends StatefulWidget {
   const Device_Screen_New({Key? key}) : super(key: key);
@@ -290,7 +292,8 @@ class _Device_Screen_NewState extends State<Device_Screen_New>{
                   SizedBox(height: 10,),
 
                   Text(
-                    songs[currentIndex].artist.toString() == "<unknown>" ? "Unknown Artist" : songs[currentIndex].artist.toString(),
+                    songs[currentIndex].artist.toString() == "<unknown>" ?
+                    "Unknown Artist" : songs[currentIndex].artist.toString(),
                     // overflow: TextOverflow.fade,
                     maxLines: 1,
                     textAlign: TextAlign.center,
@@ -588,7 +591,17 @@ class _Device_Screen_NewState extends State<Device_Screen_New>{
         actions: [
           IconButton(
             onPressed: (){
-              //searchWidget();
+              showSearch(
+                  context: context,
+                  delegate: CustomSearch(
+                    player: _player,
+                    isPlay: isPlayerViewVisible,
+                    position: _position,
+                    currentIndex: currentIndex,
+                    duration: _duration,
+                    mysongs: songs,
+                  )
+              );
             },
             icon: Icon(Icons.search, color: myColors.darkGreen,),
           )
@@ -642,11 +655,8 @@ class _Device_Screen_NewState extends State<Device_Screen_New>{
                   subtitle: Text("${item.data![index].artist}"),
                  // trailing: const Icon(Icons.more_vert),
                   onTap: () async {
+                    _player.stop();
                     _changePlayerViewVisibility();
-                    // String? uri = item.data![index].uri;
-                    // await _player.setAudioSource(
-                    //   AudioSource.uri(Uri.parse(uri!))
-                    // );
                     await _player.setAudioSource(createPlaylist(item.data!), initialIndex: index);
                     await _player.play();
                     toast(context, item.data![index].title.toString());
@@ -715,6 +725,15 @@ Widget setupAlertDialoadContainer(context , audioId) {
                       await OnAudioQuery.platform.addToPlaylist(playlistId, audioId);
                       sleep(Duration(seconds:2));
                       Navigator.pop(context);
+
+                      final OnAudioQuery onAudioQuery = OnAudioQuery();
+                      final ms = await onAudioQuery.queryAudiosFrom(AudiosFromType.PLAYLIST, playlistId.toString());
+                      for (final s in ms) {
+                        print(s.title);
+                        print(s.artist);
+                        print(s.uri);
+                        print(s.duration);
+                      }
                     },
                   ),
                 );
@@ -755,84 +774,114 @@ class DurationState {
   DurationState({this.position = Duration.zero, this.total = Duration.zero, this.buffered = Duration.zero});
 }
 
-// class CustomSearch extends SearchDelegate{
-//
-//   //final OnAudioQuery _audioQuery = OnAudioQuery();
-//   final AudioPlayer _player = AudioPlayer();
-//   late final SongModel songModel;
-//
-//   // final FlutterAudioQuery audioQuery = FlutterAudioQuery();
-//   //
-//   // List<SongInfo> songs = await audioQuery.getSongs();
-//
-//   // querySongs() async {
-//   //   // DEFAULT:
-//   //   // SongSortType.TITLE,
-//   //   // OrderType.ASC_OR_SMALLER,
-//   //   // UriType.EXTERNAL,
-//   //   List<SongModel> allData = await OnAudioQuery().querySongs(sortType: SongSortType.TITLE);
-//   // }
-//
-//   List<String> allData = ['rfer', 'referf'];
-//
-//   @override
-//   List<Widget>? buildActions(BuildContext context) {
-//     return [
-//       IconButton(
-//         icon: Icon(Icons.clear),
-//         onPressed: (){
-//           query = '';
-//         },
-//       )
-//     ];
-//   }
-//
-//   @override
-//   Widget? buildLeading(BuildContext context) {
-//     return IconButton(
-//       icon: Icon(Icons.arrow_back_ios_new),
-//       onPressed: (){
-//         close(context, null);
-//       },
-//     );
-//   }
-//
-//   @override
-//   Widget buildSuggestions(BuildContext context) {
-//     List<String> matchQuery = [];
-//     for(var item in allData){
-//       if(item.toLowerCase().contains(query.toLowerCase())){
-//         matchQuery.add(item);
-//       }
-//     }
-//     return ListView.builder(
-//       itemCount: matchQuery.length,
-//       itemBuilder: (context, index){
-//         var result = matchQuery[index];
-//         return ListTile(
-//           title: Text(result),
-//         );
-//       },
-//     );
-//   }
-//
-//   @override
-//   Widget buildResults(BuildContext context) {
-//     List<String> matchQuery = [];
-//     for(var item in allData){
-//       if(item.toLowerCase().contains(query.toLowerCase())){
-//         matchQuery.add(item);
-//       }
-//     }
-//     return ListView.builder(
-//       itemCount: matchQuery.length,
-//       itemBuilder: (context, index){
-//         var result = matchQuery[index];
-//         return ListTile(
-//           title: Text(result),
-//         );
-//       },
-//     );
-//   }
-//
-// }
+class CustomSearch extends SearchDelegate <String> {
+
+  final AudioPlayer player;
+  final bool isPlay;
+  final List<SongModel> mysongs;
+  final int currentIndex;
+  final Duration position;
+  final Duration duration;
+
+  CustomSearch(
+   {
+     required this.mysongs,
+     required this.currentIndex,
+     required this.position,
+     required this.duration,
+    required this.player,
+    required this.isPlay,
+  });
+
+  //final OnAudioQuery _audioQuery = OnAudioQuery();
+
+  late bool isPlayerViewVisible;
+
+  // final FlutterAudioQuery audioQuery = FlutterAudioQuery();
+  //
+  // List<SongInfo> songs = await audioQuery.getSongs();
+
+  // querySongs() async {
+  //   // DEFAULT:
+  //   // SongSortType.TITLE,
+  //   // OrderType.ASC_OR_SMALLER,
+  //   // UriType.EXTERNAL,
+  //   List<SongModel> allData = await OnAudioQuery().querySongs(sortType: SongSortType.TITLE);
+  // }
+
+  List<String> allData = ['Calm', 'Linkin Park', 'Music Box', "Nudge", 'Numb', 'Piggyback', "Rise", 'Shrink Ray', 'Snappy', 'Sweet', ];
+
+  @override
+  List<Widget>? buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: Icon(Icons.clear),
+        onPressed: (){
+          query = '';
+        },
+      )
+    ];
+  }
+
+  @override
+  Widget? buildLeading(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.arrow_back_ios_new),
+      onPressed: (){
+        close(context, "");
+      },
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    List<String> matchQuery = [];
+    for(var item in allData){
+      if(item.toLowerCase().contains(query.toLowerCase())){
+        matchQuery.add(item);
+      }
+    }
+    return ListView.builder(
+      itemCount: matchQuery.length,
+      itemBuilder: (context, index){
+        var result = matchQuery[index];
+        return ListTile(
+          title: Text(result),
+          onTap: (){
+            isPlayerViewVisible = true;
+            //player.stop();
+            Navigator.push(context,
+            MaterialPageRoute(builder: (context) => PlaySearch(
+              currentIndex: index,
+              duration: duration,
+              player: player,
+              position: position,
+              songs: mysongs,
+            ) )
+            );
+          },
+        );
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    List<String> matchQuery = [];
+    for(var item in allData){
+      if(item.toLowerCase().contains(query.toLowerCase())){
+        matchQuery.add(item);
+      }
+    }
+    return ListView.builder(
+      itemCount: matchQuery.length,
+      itemBuilder: (context, index){
+        var result = matchQuery[index];
+        return ListTile(
+          title: Text(result),
+        );
+      },
+    );
+  }
+
+}

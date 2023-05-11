@@ -198,6 +198,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                       onTap: (){
                                         setState(() {
+                                          player.stop();
                                           isPlay = true;
                                           currantStatePlay = true;
                                           currentMusic = snapshot.data!.musics![index];

@@ -6,6 +6,7 @@ import 'package:m_player/UI/Screens/Category/Category_Screen.dart';
 import 'package:m_player/UI/Screens/Device/Device_Screen_New.dart';
 import 'package:m_player/UI/Screens/Device/Device_Screen_Old.dart';
 import 'package:m_player/UI/Screens/Home/Home_Screen.dart';
+import 'package:m_player/UI/Web%20Music/WebMusics.dart';
 import 'package:m_player/Utils/MyColors.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -22,6 +23,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     HomeScreen(),
     CategoryScreen(),
     Playlists(),
+    WebMusics(),
     Device_Screen_New(),
     // DeviceScreen()
   ];
@@ -66,6 +68,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
           FloatingNavbarItem(
               icon: Icons.playlist_play_rounded,
               title: "Playlists"
+          ),
+
+          FloatingNavbarItem(
+            icon: Icons.online_prediction,
+            title: 'Web'
           ),
 
           FloatingNavbarItem(

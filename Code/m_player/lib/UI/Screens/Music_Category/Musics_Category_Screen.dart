@@ -124,6 +124,7 @@ class _MusicsCategoryScreenState extends State<MusicsCategoryScreen> {
                         for(int i=0; i<snapshot.data!.musics!.length; i++){
                           print(myMusicListPass[i].mp3_title);
                         }
+                        _audioPlayer.stop();
                         Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) =>
