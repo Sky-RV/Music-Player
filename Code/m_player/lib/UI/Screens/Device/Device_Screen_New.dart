@@ -280,7 +280,7 @@ class _Device_Screen_NewState extends State<Device_Screen_New>{
                   ),
 
                   Text(
-                    songs[currentIndex].displayNameWOExt,
+                    songs[currentIndex].title,
                     // overflow: TextOverflow.fade,
                     maxLines: 1,
                     textAlign: TextAlign.center,
@@ -292,8 +292,8 @@ class _Device_Screen_NewState extends State<Device_Screen_New>{
                   SizedBox(height: 10,),
 
                   Text(
-                    songs[currentIndex].artist.toString() == "<unknown>" ?
-                    "Unknown Artist" : songs[currentIndex].artist.toString(),
+                    songs[currentIndex].artist! == "<unknown>" ?
+                    "Unknown Artist" : songs[currentIndex].artist!,
                     // overflow: TextOverflow.fade,
                     maxLines: 1,
                     textAlign: TextAlign.center,

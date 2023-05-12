@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:m_player/Utils/MyColors.dart';
 // import 'package:url_launcher/url_launcher.dart';
 // import 'package:url_launcher/url_launcher_string.dart';
@@ -48,7 +49,13 @@ class _WebMusicsState extends State<WebMusics> {
   var webNamesItem = [];
   var webLinkLogoItem = [];
 
+  bool isFilter = false;
+  int currentIndex = 0;
+  String currentName = '';
+
   TextEditingController serachText = TextEditingController();
+
+  final AudioPlayer _player = AudioPlayer();
 
   @override
   void initState() {
@@ -56,6 +63,11 @@ class _WebMusicsState extends State<WebMusics> {
     super.initState();
     //webLinkLogoItem = webLinkLogos;
     webNamesItem = webNames;
+    _player.currentIndexStream.listen((index) {
+      if(index != null){
+        updateIndex(index);
+      }
+    });
   }
 
   void filterSearchResults(String query) {
@@ -66,8 +78,70 @@ class _WebMusicsState extends State<WebMusics> {
     });
   }
 
+  void changeFilteringView(){
+    setState(() {
+      isFilter = !isFilter;
+    });
+  }
+
+  void updateIndex(int index){
+    setState(() {
+      if(webNames.isNotEmpty){
+        currentName = webNames[index];
+        currentIndex = index;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (isFilter){
+      return Scaffold(
+        backgroundColor: myColors.white,
+        body: Center(
+          child: Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              color: Colors.grey.shade50,
+              borderRadius: BorderRadius.all(Radius.circular(8)),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+
+                Text(
+                  webNames[currentIndex],
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 24
+                  ),
+                ),
+                SizedBox(height: 20,),
+
+                Text(
+                  webLinks[currentIndex],
+                  style: TextStyle(
+                      color: Colors.blue,
+                      fontSize: 24
+                  ),
+                ),
+                SizedBox(height: 40,),
+
+                Text(
+                  "X Access Denied! X",
+                  style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24
+                  ),
+                ),
+
+              ],
+            )
+          ),
+        ),
+      );
+    }
     return Scaffold(
       backgroundColor: myColors.white,
 
@@ -95,6 +169,7 @@ class _WebMusicsState extends State<WebMusics> {
                     prefixIcon: Icon(Icons.search),
                     suffixIcon: IconButton(
                       onPressed: () async {
+                        changeFilteringView();
                         // if (await canLaunchUrl(Uri.parse(serachText.text))) {
                         //   await launchUrl(Uri.parse(serachText.text));
                         // } else {
@@ -115,6 +190,7 @@ class _WebMusicsState extends State<WebMusics> {
                 itemBuilder: (context, index) {
                   return ListTile(
                     onTap: () async {
+                      changeFilteringView();
                       // if (await canLaunchUrl(Uri.parse(webLinks[index]))) {
                       //   await launchUrl(Uri.parse(webLinks[index]));
                       // } else {
