@@ -161,7 +161,7 @@ class _Device_Screen_NewState extends State<Device_Screen_New>{
   // }
 
   void requestStoragePermission() async {
-    // Permission.storage.request();
+    // Permission.s  torage.request();
     // only if the platform is not web. (web has no permission)
     if(!kIsWeb){
       bool permissionStatus = await _audioQuery.permissionsStatus();
