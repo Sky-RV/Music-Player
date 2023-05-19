@@ -554,7 +554,7 @@ class _Device_Screen_NewState extends State<Device_Screen_New>{
                                       child: Padding(
                                         padding: EdgeInsets.zero,
                                         child: Text(
-                                          'Choose Playlist :',
+                                          'انتخاب پلی لیست :',
                                           style: TextStyle(color: myColors.darkGreen),
                                         ),
                                     ),
@@ -619,7 +619,7 @@ class _Device_Screen_NewState extends State<Device_Screen_New>{
             return const Center(child: CircularProgressIndicator(),);
           }
           if(item.data!.isEmpty){
-            return const Center(child: Text("No Music Found"),);
+            return const Center(child: Text("موزیک یافت نشد."),);
           }
           songs.clear();
           songs = item.data!;
@@ -692,7 +692,7 @@ Widget setupAlertDialoadContainer(context , audioId) {
               return const Center(child: CircularProgressIndicator(),);
             }
             if(item.data!.isEmpty){
-              return const Center(child: Text("No Playlist."),);
+              return const Center(child: Text("پلی لیست وجود ندارد."),);
             }
             return ListView.builder(
               itemCount: item.data!.length,
@@ -760,7 +760,7 @@ Widget setupAlertDialoadContainer(context , audioId) {
         child: TextButton(
           onPressed: (){
             Navigator.pop(context);
-          },child: Text("Cancel"),),
+          },child: Text("لغو"),),
       )
     ],
   );

@@ -51,11 +51,11 @@ class _PlaylistsState extends State<Playlists>
                 unselectedLabelColor: myColors.darkGreen,
                 tabs: [
                   Tab(
-                    text: 'Online Playlist',
+                    text: 'پلی لیست آنلاین',
                   ), // Online
 
                   Tab(
-                    text: 'Offline Playlist',
+                    text: 'پلی لیست آفلاین',
                   ), // Offline
                 ],
               ),

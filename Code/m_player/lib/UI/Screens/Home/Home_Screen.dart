@@ -109,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       }
                       else if (snapshot.hasError){
                         return Center(
-                          child: Text("Error accured. Please check your connection."),
+                          child: Text("ارور! لطفا اتصال به اینترنت خود را چک کنید."),
                         );
                       }
                       else{
@@ -128,13 +128,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           // width: MediaQuery.of(context).size.width, // New Music text would be in the center
                           // height: MediaQuery.of(context).size.height,
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               // New Music Text
                               Container(
                                 margin: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                                 child: Text(
-                                  "New Musics",
+                                  "جدید ترین آهنگ ها",
                                   style: TextStyle(
                                       fontSize: 26,
                                       color: myColors.green
@@ -214,7 +214,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       }
                       else if (snapshot.hasError){
                         return Center(
-                          child: Text("Error accured. Please check your connection."),
+                          child: Text("ارور! لطفا اتصال به اینترنت خود را چک کنید."),
                         );
                       }
                       else{
@@ -232,12 +232,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         return Container(
                           width: MediaQuery.of(context).size.width,
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               Container(
                                 margin: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                                 child: Text(
-                                  "New Albums",
+                                  "جدید ترین آلبوم ها",
                                   style: TextStyle(
                                       fontSize: 26,
                                       color: myColors.green
@@ -315,7 +315,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       }
                       else if (snapshot.hasError){
                         return Center(
-                          child: Text("Error accured. Please check your connection."),
+                          child: Text("ارور! لطفا اتصال به اینترنت خود را چک کنید."),
                         );
                       }
                       else{
@@ -331,12 +331,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     builder: (context, snapshot){
                       if (snapshot.hasData){
                         return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Container(
                               margin: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                               child: Text(
-                                "Latest Artists",
+                                "جدیدترین خواننده ها",
                                 style: TextStyle(
                                     fontSize: 26,
                                     color: myColors.green
@@ -405,7 +405,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       }
                       else if (snapshot.hasError){
                         return Center(
-                          child: Text("Error accured. Please check your connection."),
+                          child: Text("ارور! لطفا اتصال به اینترنت خود را چک کنید."),
                         );
                       }
                       else{

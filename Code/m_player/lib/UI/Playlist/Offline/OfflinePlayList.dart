@@ -50,19 +50,19 @@ class _OfflinePlaylistState extends State<OfflinePlaylist> {
                           controller: playlistName,
                           autofocus: true,
                           decoration: new InputDecoration(
-                              labelText: 'Playlist Name'),
+                              labelText: 'نام پلی لیست'),
                         ),
                       )
                     ],
                   ),
                   actions: <Widget>[
                     new TextButton(
-                        child: const Text('Cancel'),
+                        child: const Text('لغو'),
                         onPressed: () {
                           Navigator.pop(context);
                         }),
                     new TextButton(
-                        child: const Text('Save'),
+                        child: const Text('ذخیره'),
                         onPressed: () async {
                           setState(() async {
                             String name = playlistName.text.toString();
@@ -93,7 +93,7 @@ class _OfflinePlaylistState extends State<OfflinePlaylist> {
             return const Center(child: CircularProgressIndicator(),);
           }
           if(item.data!.isEmpty){
-            return const Center(child: Text("No Playlist."),);
+            return const Center(child: Text("پلی لیست وجود ندارد."),);
           }
           // playlist.clear();
           // playlist = item.data!;

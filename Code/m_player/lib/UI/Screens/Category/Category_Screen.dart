@@ -118,7 +118,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
             }
             else if (snapshot.hasError){
               return Center(
-                child: Text("Error accured. Please check your connection."),
+                child: Text("ارور! لطفا اتصال به اینترنت خود را چک کنید."),
               );
             }
             else{

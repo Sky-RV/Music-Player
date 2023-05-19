@@ -341,7 +341,7 @@ class _PlayOnlineState extends State<PlayOnline> {
                                     child: Padding(
                                       padding: EdgeInsets.zero,
                                       child: Text(
-                                        'Choose Playlist :',
+                                        'انتخاب پلی لیست : ',
                                         style: TextStyle(color: myColors.darkGreen),
                                       ),
                                     ),
@@ -384,7 +384,7 @@ class _PlayOnlineState extends State<PlayOnline> {
         future: getMusics,
         builder: (context, item){
           if(item.data!.musics!.isEmpty){
-            return const Center(child: Text("No Music Found"),);
+            return const Center(child: Text("موزیکی یافت نشد."),);
           }
           if(item.data!.musics! == null){
             return const Center(child: CircularProgressIndicator(),);
@@ -451,7 +451,7 @@ Widget setupAlertDialoadContainer(context , audioId, getPlaylists) {
               return const Center(child: CircularProgressIndicator(),);
             }
             if(item.data!.playlists!.isEmpty){
-              return const Center(child: Text("No Playlist."),);
+              return const Center(child: Text("پلی لیست وجود ندارد."),);
             }
             return ListView.builder(
               itemCount: item.data!.playlists!.length,
@@ -509,7 +509,7 @@ Widget setupAlertDialoadContainer(context , audioId, getPlaylists) {
         child: TextButton(
           onPressed: (){
             Navigator.pop(context);
-          },child: Text("Cancel"),),
+          },child: Text("لغو"),),
       )
     ],
   );

@@ -128,7 +128,7 @@ class _WebMusicsState extends State<WebMusics> {
                 SizedBox(height: 40,),
 
                 Text(
-                  "X Access Denied! X",
+                  "X دسترسی غیر مجاز X",
                   style: TextStyle(
                       color: Colors.red,
                       fontWeight: FontWeight.bold,
@@ -156,16 +156,16 @@ class _WebMusicsState extends State<WebMusics> {
                 },
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Please enter a link';
+                    return 'لطفا آدرس لینک وارد کنید.';
                   } else if (!Uri.parse(value!).isAbsolute) {
-                    return 'Please enter a valid URL';
+                    return 'لطفا آدرس معتبری وارد کنید.';
                   }
                   return null;
                 },
                 controller: serachText,
                 decoration: InputDecoration(
-                    labelText: "Search",
-                    hintText: "Search",
+                    labelText: "جستجو",
+                    hintText: "جستجو",
                     prefixIcon: Icon(Icons.search),
                     suffixIcon: IconButton(
                       onPressed: () async {

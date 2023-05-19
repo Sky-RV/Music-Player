@@ -1065,7 +1065,7 @@ class _PlaylistSongsOfflineState extends State<PlaylistSongsOffline>{
                                     child: Padding(
                                       padding: EdgeInsets.zero,
                                       child: Text(
-                                        'Choose Playlist :',
+                                        'انتخاب پلی لیست :',
                                         style: TextStyle(color: myColors.darkGreen),
                                       ),
                                     ),
@@ -1112,7 +1112,7 @@ class _PlaylistSongsOfflineState extends State<PlaylistSongsOffline>{
             return const Center(child: CircularProgressIndicator(),);
           }
           if(item.data!.isEmpty){
-            return const Center(child: Text("No Music Found"),);
+            return const Center(child: Text("موزیکی یافت نشد."),);
           }
           songs.clear();
           songs = item.data!;
@@ -1188,7 +1188,7 @@ Widget setupAlertDialoadContainer(context , audioId) {
               return const Center(child: CircularProgressIndicator(),);
             }
             if(item.data!.isEmpty){
-              return const Center(child: Text("No Playlist."),);
+              return const Center(child: Text("پلی لیست وجود ندارد."),);
             }
             return ListView.builder(
               itemCount: item.data!.length,
@@ -1256,7 +1256,7 @@ Widget setupAlertDialoadContainer(context , audioId) {
         child: TextButton(
           onPressed: (){
             Navigator.pop(context);
-          },child: Text("Cancel"),),
+          },child: Text("لغو"),),
       )
     ],
   );
